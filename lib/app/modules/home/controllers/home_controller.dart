@@ -9,19 +9,17 @@ class HomeController extends GetxController {
   final LocalGetStorageService _localGetStorageService =
       LocalGetStorageService();
   final ApiService apiService = ApiService();
-  // RxList<Post> posts = <Post>[].obs;
   RxList<Post> posts = List<Post>.empty(growable: true).obs;
   String error = "";
-  final count = 0.obs;
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    await getData();
   }
 
   @override
   void onReady() async {
     super.onReady();
-    await getData();
   }
 
   @override
@@ -30,16 +28,12 @@ class HomeController extends GetxController {
   }
 
   Future<void> getData() async {
-      dynamic result = await ApiService().getPosts();
-
-      posts.assignAll(postFromJson(result));
-      print(posts);
+    dynamic result = await ApiService().getPosts();
+    posts.assignAll(postFromJson(result));
   }
 
   void logout() {
     _localGetStorageService.logout();
-    Get.toNamed(Routes.AUTH);
+    Get.toNamed(Routes.LOGIN);
   }
-
-  void increment() => count.value++;
 }

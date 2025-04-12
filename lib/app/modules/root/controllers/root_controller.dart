@@ -12,7 +12,7 @@ class RootController extends GetxController {
     if (isLogg) {
       Get.toNamed(Routes.HOME);
     } else {
-      Get.toNamed(Routes.AUTH);
+      Get.toNamed(Routes.LOGIN);
     }
   }
 

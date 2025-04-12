@@ -77,12 +77,6 @@ class ApiService {
   // Adding user
   Future<User?> addUser(String email, String username, String password) async {
     try {
-      // var url = Uri.parse(dotenv.get('baseUrl') + dotenv.get('usersEndpoint'));
-      // var response = await http.post(
-      //   url,
-      //   headers: {"Authorization": "Bearer ${dotenv.get('accesToken')}"},
-      //   body: {"email": email, "username": username, "password": password},
-      // );
       response = await dio.post(
         usersUrl,
         options: Options(headers: {"Authorization": "Bearer $tokenStrapi"}),
@@ -104,9 +98,22 @@ class ApiService {
 
   Future<dynamic> getPosts() async {
     response = await dio.get(postUrl);
-    List<Post> model = postFromJson(response.data['data']);
-    // var result =  response.data['data'];
-  
-    return model;
+    // List<Post> model = postFromJson(response.data['data']);
+    var result = response.data['data'];
+
+    return result;
+  }
+
+  Future<dynamic> signUp({
+    required String email,
+    required String password,
+  }) async {
+    var body = {"username": email, "email": email, "password": password};
+    var response = await dio.post(
+      '$baseUrl/api/auth/local/register',
+      options: Options(headers: {"Content-Type": "application/json"}),
+      data: jsonEncode(body),
+    );
+    return response;
   }
 }

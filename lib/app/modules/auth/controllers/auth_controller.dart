@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../services/api.dart';
 import '../../../services/local_get_storage.dart';
@@ -49,10 +50,41 @@ class AuthController extends GetxController {
     } finally {}
   }
 
+  void signUp({
+    required String fullName,
+    required String email,
+    required String password,
+  }) async {
+    try {
+      EasyLoading.show(status: 'Loading...', dismissOnTap: false);
+      var result = await ApiService().signUp(email: email, password: password);
+      if (result.statusCode == 200) {
+        String token = json.decode(result.body)['jwt'];
+        var userResult = await ApiService().createProfile(
+          fullName: fullName,
+          token: token,
+        );
+        if (userResult.statusCode == 200) {
+          storageService.addToken(token);
+          storageService.addUser(userResult.data);
+          EasyLoading.showSuccess("Welcome to MyGrocery!");
+          Get.toNamed(Routes.HOME);
+        } else {
+          EasyLoading.showError('Something wrong. Try again!');
+        }
+      }
+    } catch (e) {
+      EasyLoading.showError('Something wrong. Try again!');
+      debugPrint(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
   void signOut() async {
     user.value = null;
     storageService.removeTokenFromGetStorage('token');
     storageService.removeTokenFromGetStorage('user');
-    Get.toNamed(Routes.AUTH);
+    Get.toNamed(Routes.LOGIN);
   }
 }
