@@ -15,11 +15,6 @@ class LoginController extends GetxController {
   Rxn<User> user = Rxn<User>();
   final LocalGetStorageService storageService = LocalGetStorageService();
 
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmController = TextEditingController();
 
   signIn({required String email, required String password}) async {
     try {
