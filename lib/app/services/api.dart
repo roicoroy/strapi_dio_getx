@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:strapi_dio_getx/main.dart';
 
@@ -18,45 +19,57 @@ class ApiService {
     required String email,
     required String password,
   }) async {
-    var body = {"identifier": email, "password": password};
+    try {
+      var body = {"identifier": email, "password": password};
 
-    response = await dio.post(
-      '$baseUrl/api/auth/local',
-      options: Options(headers: {"Content-Type": "application/json"}),
-      data: jsonEncode(body),
-    );
-    return response;
+      response = await dio.post(
+        '$baseUrl/api/auth/local',
+        options: Options(headers: {"Content-Type": "application/json"}),
+        data: jsonEncode(body),
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<dynamic> createProfile({
     required String fullName,
     required String token,
   }) async {
-    var body = {"fullName": fullName};
-    var response = await dio.post(
-      '$baseUrl/api/profile/me',
-      options: Options(
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      ),
-      data: jsonEncode(body),
-    );
-    return response;
+    try {
+      var body = {"fullName": fullName};
+      var response = await dio.post(
+        '$baseUrl/api/profile/me',
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+        ),
+        data: jsonEncode(body),
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<dynamic> getProfile({required String token}) async {
-    var response = await dio.get(
-      '$baseUrl/api/profile/me',
-      options: Options(
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      ),
-    );
-    return response;
+    try {
+      var response = await dio.get(
+        '$baseUrl/api/profile/me',
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+        ),
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<List<User>?> getUsers() async {
@@ -97,23 +110,30 @@ class ApiService {
   }
 
   Future<dynamic> getPosts() async {
-    response = await dio.get(postUrl);
-    // List<Post> model = postFromJson(response.data['data']);
-    var result = response.data['data'];
+    try {
+      response = await dio.get(postUrl);
+      var result = response.data['data'];
 
-    return result;
+      return result;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   Future<dynamic> signUp({
     required String email,
     required String password,
   }) async {
-    var body = {"username": email, "email": email, "password": password};
-    var response = await dio.post(
-      '$baseUrl/api/auth/local/register',
-      options: Options(headers: {"Content-Type": "application/json"}),
-      data: jsonEncode(body),
-    );
-    return response;
+    try {
+      var body = {"username": email, "email": email, "password": password};
+      var response = await dio.post(
+        '$baseUrl/api/auth/local/register',
+        options: Options(headers: {"Content-Type": "application/json"}),
+        data: jsonEncode(body),
+      );
+      return response;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }

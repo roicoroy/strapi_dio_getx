@@ -3,13 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:strapi_dio_getx/app/extension/string_extensions.dart';
 
-import '../../../components/input_outline_button.dart';
 import '../../../components/input_text_button.dart';
 import '../../../components/input_text_field.dart';
 import '../../../routes/app_pages.dart';
-import '../controllers/auth_controller.dart';
+import '../controllers/login_controller.dart';
 
-class LoginView extends GetView<AuthController> {
+class LoginView extends GetView<LoginController> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();

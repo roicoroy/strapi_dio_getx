@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
+        android:hardwareAccelerated="true"
         android:label="strapi_dio_getx"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
