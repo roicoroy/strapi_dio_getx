@@ -1,18 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../const.dart';
+import '../../const.dart';
+import 'get_token_service.dart';
 
 class DioInterceptor extends Interceptor {
   Dio dio = Dio(BaseOptions(baseUrl: strapiBaseUrl));
-
+  final GetTokenService getTokenService = GetTokenService();
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    final tokenBox = GetStorage('token');
-    String getToken() => tokenBox.read('token');
-    String token = getToken();
+    String? token = getTokenService.get();
 
-    if (token.isNotEmpty) {
+    if (getTokenService.get() != null) {
       options.headers.addAll({
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",

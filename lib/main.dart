@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 // import 'app/dio_interceptor.dart';
-import 'app/dio_interceptor.dart';
+import 'app/services/dio_interceptor.dart';
 import 'app/routes/app_pages.dart';
 import 'const.dart';
 import 'package:path_provider/path_provider.dart';

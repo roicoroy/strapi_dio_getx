@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:strapi_dio_getx/app/modules/splash/view/splash_view.dart';
 
 import '../modules/auth/bindings/auth_binding.dart';
-import '../modules/auth/views/auth_view.dart';
+import '../modules/auth/views/login_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/root/bindings/root_binding.dart';
@@ -28,7 +28,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.AUTH,
-      page: () => AuthView(),
+      page: () => LoginView(),
       binding: AuthBinding(),
     ),
     GetPage(

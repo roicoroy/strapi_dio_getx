@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../../../model/services/api.dart';
-import '../../../model/services/local_get_storage.dart';
+import '../../../services/api.dart';
+import '../../../services/local_get_storage.dart';
 import '../../../model/user.dart';
 import '../../../routes/app_pages.dart';
 

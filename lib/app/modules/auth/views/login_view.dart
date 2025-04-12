@@ -8,12 +8,12 @@ import '../../../components/input_text_button.dart';
 import '../../../components/input_text_field.dart';
 import '../controllers/auth_controller.dart';
 
-class AuthView extends GetView<AuthController> {
+class LoginView extends GetView<AuthController> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  AuthView({super.key});
+  LoginView({super.key});
   @override
   Widget build(BuildContext context) {
     emailController = TextEditingController(text: "roicoroy@yahoo.com.br");
@@ -30,7 +30,7 @@ class AuthView extends GetView<AuthController> {
               children: [
                 const Spacer(),
                 const Text(
-                  "Welcome,",
+                  "Strapi,",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 32,
@@ -38,7 +38,7 @@ class AuthView extends GetView<AuthController> {
                   ),
                 ),
                 const Text(
-                  "Sign in to continue!",
+                  "Cow Logger",
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 22,
@@ -72,18 +72,7 @@ class AuthView extends GetView<AuthController> {
                   },
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: const Text(
-                        "Forgot Password",
-                        style: TextStyle(fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
+    
                 const Spacer(),
                 InputTextButton(
                   title: "Sign In",
@@ -98,18 +87,7 @@ class AuthView extends GetView<AuthController> {
                 ),
 
                 const Spacer(flex: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text("I'm new user, "),
-                    InkWell(
-                      child: const Text(
-                        "Sign Up",
-                        style: TextStyle(color: Colors.blue),
-                      ),
-                    ),
-                  ],
-                ),
+      
                 const SizedBox(height: 10),
               ],
             ),

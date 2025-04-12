@@ -5,9 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:strapi_dio_getx/main.dart';
 
-import '../../../const.dart';
-import '../post.dart';
-import '../user.dart' show User, UserFromJson, singleUserFromJson;
+import '../../const.dart';
+import '../model/post.dart';
+import '../model/user.dart' show User, UserFromJson, singleUserFromJson;
 
 class ApiService {
   var usersUrl = '$baseUrl/api/$usersEndpoint';
@@ -35,10 +35,6 @@ class ApiService {
     var body = {"fullName": fullName};
     var response = await dio.post(
       '$baseUrl/api/profile/me',
-      // headers: {
-      //   "Content-Type": "application/json",
-      //   "Authorization": "Bearer $token"
-      // },
       options: Options(
         headers: {
           "Content-Type": "application/json",
@@ -106,30 +102,11 @@ class ApiService {
     }
   }
 
-  // Getting posts
-  // RxList<Post> getPosts() {
-  //   try {
-  //     response = dio.get(postUrl);
-  //     if (response.statusCode == 200) {
-  //       print(response.data);
-  //       return response.data;
-  //     } else {
-  //       throw Exception(
-  //         jsonDecode(response.data.toString())["error"]["message"],
-  //       );
-  //     }
-  //   } catch (e) {
-  //     throw Exception(e);
-  //   }
-  // }
-
   Future<dynamic> getPosts() async {
-    dynamic response = await dio.get(postUrl);
-    List<Post> postList = [];
-    var result =  response.data['data'];
-    // var _model = Post.fromJson(response.data['data']);
-    // var _model = postFromJson(jsonDecode(response.data)['data']);
-
-    return result;
+    response = await dio.get(postUrl);
+    List<Post> model = postFromJson(response.data['data']);
+    // var result =  response.data['data'];
+  
+    return model;
   }
 }
