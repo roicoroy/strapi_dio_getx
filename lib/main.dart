@@ -15,7 +15,7 @@ import 'theme/app_theme.dart';
 
 final dio = Dio(); // With default `Options`.
 
-void configureDio() {
+configureDio() async {
   // Set default configs
   dio.options.baseUrl = strapiBaseUrl;
   dio.options.connectTimeout = Duration(seconds: 5);
@@ -35,8 +35,8 @@ void configureDio() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDio();
-  configLoading();
+  await configureDio();
+  await configLoading();
   final document = await getApplicationDocumentsDirectory();
   await GetStorage.init(document.path);
   await GetStorage.init('token');
@@ -53,7 +53,7 @@ void main() async {
   );
 }
 
-void configLoading(){
+configLoading() async {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle

@@ -17,16 +17,6 @@ class HomeController extends GetxController {
     await getData();
   }
 
-  @override
-  void onReady() async {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> getData() async {
     dynamic result = await ApiService().getPosts();
     posts.assignAll(postFromJson(result));
