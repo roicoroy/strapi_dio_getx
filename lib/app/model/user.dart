@@ -1,41 +1,55 @@
-    import 'dart:convert';
-    
-    // getting a list of users from json
-    List<User> UserFromJson(String str) =>
-       List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
-    // getting a single user from json
-    User singleUserFromJson(String str) => User.fromJson(json.decode(str));
-    
-    // user class
-    class User {
-      User({
-       required this.id,
-       required this.username,
-       required this.email,
-       required this.provider,
-       required this.confirmed,
-       required this.blocked,
-       required this.createdAt,
-       required this.updatedAt,
-      });
-    
-      int id;
-      String username;
-      String email;
-      String provider;
-      bool confirmed;
-      bool blocked;
-      DateTime createdAt;
-      DateTime updatedAt;
-    
-      factory User.fromJson(Map<String, dynamic> json) => User(
-         id: json["id"],
-         username: json["username"],
-         email: json["email"],
-         provider: json["provider"],
-         confirmed: json["confirmed"],
-         blocked: json["blocked"],
-         createdAt: DateTime.parse(json["createdAt"]),
-         updatedAt: DateTime.parse(json["updatedAt"]),
-        );
-    }
+// To parse this JSON data, do
+//
+//     final user = userFromJson(jsonString);
+
+import 'dart:convert';
+
+import 'image.dart';
+
+User userFromJson(String str) => User.fromJson(json.decode(str));
+
+String userToJson(User data) => json.encode(data.toJson());
+
+class User {
+    int id;
+    String fullName;
+    String email;
+    String? age;
+    DateTime createdAt;
+    DateTime updatedAt;
+    dynamic publishedAt;
+    dynamic? image;
+
+    User({
+        required this.id,
+        required this.fullName,
+        required this.email,
+        this.age,
+        required this.createdAt,
+        required this.updatedAt,
+        this.publishedAt,
+        this.image,
+    });
+
+    factory User.fromJson(Map<String, dynamic> json) => User(
+        id: json["id"],
+        fullName: json["fullName"],
+        email: json["email"],
+        age: json["age"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        publishedAt: json["publishedAt"],
+        // image: json["image"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "fullName": fullName,
+        "email": email,
+        "age": age,
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+        "publishedAt": publishedAt,
+        // "image": image.url,
+    };
+}

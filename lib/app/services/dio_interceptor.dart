@@ -8,18 +8,17 @@ class DioInterceptor extends Interceptor {
   Dio dio = Dio(BaseOptions(baseUrl: strapiBaseUrl));
   final GetTokenService getTokenService = GetTokenService();
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    String? token = getTokenService.get();
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    String? token = await getTokenService.get();
 
-    if (getTokenService.get() != null) {
-      options.headers.addAll({
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      });
-    } else {
-      options.headers.addAll({"Content-Type": "application/json"});
-    }
-    return super.onRequest(options, handler);
+    options.headers.addAll({
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
+      return super.onRequest(options, handler);
   }
 
   @override

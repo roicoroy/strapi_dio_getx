@@ -4,7 +4,7 @@ class GetTokenService {
   final tokenBox = GetStorage('token');
 
   Future<String?> getToken() async {
-    String? token = get();
+    String? token = await get();
     if(token != null){
       return token;
     } else {
@@ -12,6 +12,6 @@ class GetTokenService {
     }
   }
 
-  String? get() => tokenBox.read('token');
+  Future<String?> get() async=> tokenBox.read('token');
 
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../../../model/post.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
@@ -15,6 +14,18 @@ class HomeView extends GetView<HomeController> {
         title: const Text('HomeView'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.code),
+            onPressed: () {
+              Get.toNamed(Routes.COW_LOGGER);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.looks_outlined),
+            onPressed: () {
+              Get.toNamed(Routes.PROFILE);
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
               controller.logout();
@@ -25,7 +36,6 @@ class HomeView extends GetView<HomeController> {
         automaticallyImplyLeading: false,
       ),
       body: Obx(() {
-        // final HomeController controller = Get.find<HomeController>();
         return Center(
           child: ListView.builder(
             itemCount: controller.posts.value.length,

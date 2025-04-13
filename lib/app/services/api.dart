@@ -8,7 +8,7 @@ import 'package:strapi_dio_getx/main.dart';
 
 import '../../const.dart';
 import '../model/post.dart';
-import '../model/user.dart' show User, UserFromJson, singleUserFromJson;
+import '../model/user.dart' show User, userFromJson;
 
 class ApiService {
   var usersUrl = '$baseUrl/api/$usersEndpoint';
@@ -72,11 +72,11 @@ class ApiService {
     }
   }
 
-  Future<List<User>?> getUsers() async {
+  Future<User?> getUsers() async {
     try {
       response = await dio.get(usersUrl);
       if (response.statusCode == 200) {
-        List<User> model = UserFromJson(response.data.toString());
+        User model = userFromJson(response.data.toString());
         return model;
       } else {
         String error = jsonDecode(response.data.toString())['error']['message'];
@@ -98,7 +98,7 @@ class ApiService {
         },
       );
       if (response.statusCode == 201) {
-        User model = singleUserFromJson(response.data.toString());
+        User model = userFromJson(response.data.toString());
         return model;
       } else {
         String error = jsonDecode(response.data.toString())['error']['message'];

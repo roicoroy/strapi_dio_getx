@@ -18,6 +18,8 @@ class RegisterController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmController = TextEditingController();
 
+
+
   signUp({
     required String fullName,
     required String email,
@@ -34,7 +36,7 @@ class RegisterController extends GetxController {
           token: token,
         );
         if (userResult.statusCode == 200) {
-            storageService.addToken(token);
+          storageService.addToken(token);
           storageService.addUser(userResult.data);
           Get.toNamed(Routes.HOME);
         } else {

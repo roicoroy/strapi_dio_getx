@@ -15,15 +15,16 @@ class LoginController extends GetxController {
   Rxn<User> user = Rxn<User>();
   final LocalGetStorageService storageService = LocalGetStorageService();
 
-
   signIn({required String email, required String password}) async {
     try {
       EasyLoading.show(status: 'Loading...', dismissOnTap: false);
       var result = await ApiService().signIn(email: email, password: password);
       if (result.statusCode == 200) {
         String token = result.data['jwt'];
+        storageService.addToken(token);
         var userResult = await ApiService().getProfile(token: token);
         if (userResult.statusCode == 200) {
+          user.value = User.fromJson(userResult.data);
           storageService.addToken(token);
           storageService.addUser(userResult.data);
           Get.toNamed(Routes.HOME);

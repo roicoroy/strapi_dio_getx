@@ -10,4 +10,6 @@ String usersEndpoint = "users";
 
 String postsEndpoint = "posts";
 
+String cowLoggerEndpoint = "cow-loggers";
+
 Map<String, String> header = {"Content-type": "application/json"};
