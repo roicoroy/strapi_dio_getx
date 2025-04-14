@@ -1,55 +1,31 @@
-// To parse this JSON data, do
-//
-//     final user = userFromJson(jsonString);
-
 import 'dart:convert';
 
-import 'image.dart';
+import 'package:hive/hive.dart';
+
+part 'user.g.dart';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));
 
-String userToJson(User data) => json.encode(data.toJson());
-
+@HiveType(typeId: 4)
 class User {
-    int id;
-    String fullName;
-    String email;
-    String? age;
-    DateTime createdAt;
-    DateTime updatedAt;
-    dynamic publishedAt;
-    dynamic? image;
+  @HiveField(0)
+  String id;
+  @HiveField(1)
+  String fullName;
+  @HiveField(2)
+  String email;
+  @HiveField(3)
+  String? image;
+  @HiveField(4)
+  DateTime? birthDay;
 
-    User({
-        required this.id,
-        required this.fullName,
-        required this.email,
-        this.age,
-        required this.createdAt,
-        required this.updatedAt,
-        this.publishedAt,
-        this.image,
-    });
+  User({required this.id,required this.fullName,required this.email,this.image, this.birthDay});
 
-    factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        fullName: json["fullName"],
-        email: json["email"],
-        age: json["age"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        publishedAt: json["publishedAt"],
-        // image: json["image"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "id": id,
-        "fullName": fullName,
-        "email": email,
-        "age": age,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "publishedAt": publishedAt,
-        // "image": image.url,
-    };
+  factory User.fromJson(Map<String, dynamic> data) => User(
+      id: data['id'].toString(),
+      fullName: data['fullName'],
+      email: data['email'],
+      image: data['image'] == null ? null : data['image']['url'],
+      birthDay: data['age'] == null ? null : DateTime.parse(data['age']),
+  );
 }
