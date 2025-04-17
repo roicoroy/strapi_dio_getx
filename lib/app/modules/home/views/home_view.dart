@@ -35,22 +35,11 @@ class HomeView extends GetView<HomeController> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Obx(() {
-        return Center(
-          child: ListView.builder(
-            itemCount: controller.posts.value.length,
-            itemBuilder: (context, index) {
-              final item = controller.posts.value[index].title;
-              return ListTile(
-                title: Text(item),
-                onTap: () {
-                  // Get.toNamed(Routes.POST, arguments: controller.posts.value[index]);
-                },
-              );
-            },
-          ),
-        );
-      }),
+      body: 
+         Center(
+          child: Text('Home'),
+        ),
+      
     );
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
-import '../../../services/api.dart';
+import '../../../services/network/api.dart';
 import '../../../services/local_get_storage.dart';
 
 class RegisterController extends GetxController {

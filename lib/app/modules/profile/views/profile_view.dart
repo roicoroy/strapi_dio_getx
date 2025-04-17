@@ -33,7 +33,7 @@ class ProfileView extends GetView<ProfileController> {
                   Column(
                     children: [
                       Text(
-                        controller.user.value?.fullName ??
+                        controller.user.value?.user?.email ??
                             "Sign in your account",
                         style: const TextStyle(
                           fontSize: 20,
@@ -41,7 +41,7 @@ class ProfileView extends GetView<ProfileController> {
                         ),
                       ),
                       Text(
-                        controller.user.value?.email ?? "Sign in your account",
+                        controller.user.value?.user?.email ?? "Sign in your account",
                       ),
                     ],
                   ),

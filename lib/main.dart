@@ -1,15 +1,14 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 // import 'app/dio_interceptor.dart';
-import 'app/model/cow_logger.dart';
-import 'app/model/user.dart';
 import 'app/services/dio_interceptor.dart';
 import 'app/routes/app_pages.dart';
 import 'const.dart';
@@ -38,15 +37,14 @@ configureDio() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  DartPluginRegistrant.ensureInitialized();
   await configureDio();
   await configLoading();
   final document = await getApplicationDocumentsDirectory();
   await GetStorage.init(document.path);
   await GetStorage.init('token');
+  await GetStorage.init('user');
   dio.interceptors.add(DioInterceptor());
-  await Hive.initFlutter();
-  Hive.registerAdapter(UserAdapter());
-  Hive.registerAdapter(CowAdapter());
   runApp(
     GetMaterialApp(
       title: "Cow Logger",

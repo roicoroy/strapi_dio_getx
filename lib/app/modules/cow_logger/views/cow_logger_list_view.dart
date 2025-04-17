@@ -15,28 +15,29 @@ class CowLoggerListView extends GetView<CowLoggerListController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('CowLoggerListView'), centerTitle: true),
-      body: Text(
-        'CowLoggerListView is working $controller',
-        style: TextStyle(fontSize: 20),
+      body: Obx(
+        () => Center(
+          child: ListView.builder(
+            itemCount: controller.list.value.length,
+            itemBuilder: (context, index) {
+              final item = controller.list.value[index].attributes?.name;
+              return ListTile(
+                title: Text(item ?? 'fd'),
+                onTap: () {
+                  Get.toNamed(
+                    Routes.COW_LOGGER_DETAILS,
+                    arguments: {'log': controller.list.value[index]},
+                  );
+                },
+              );
+            },
+          ),
+        ),
       ),
-      // body: Obx(
-      //   () => Center(
-      //     child: ElevatedButton(
-      //       onPressed:
-      //           () => {
-      //             Get.toNamed(
-      //               Routes.COW_LOGGER_DETAILS,
-      //               arguments: {'id': '123'},
-      //             ),
-      //           },
-      //       child: Text('Cow Logger details'),
-      //     ),
-      //   ),
-      // ),
       floatingActionButton: FloatingActionButton(
         onPressed:
             () => {
-              Get.toNamed(Routes.COW_LOGGER_DETAILS, arguments: {'id': null}),
+              Get.toNamed(Routes.COW_LOGGER_DETAILS, arguments: {'log': null}),
             },
         tooltip: 'Increment',
         child: Icon(Icons.add),

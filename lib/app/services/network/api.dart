@@ -3,17 +3,15 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:strapi_dio_getx/main.dart';
 
-import '../../const.dart';
-import '../model/post.dart';
-import '../model/user.dart' show User, userFromJson;
+import '../../../const.dart';
+import '../../model/user.dart' show User;
 
 class ApiService {
   var usersUrl = '$baseUrl/api/$usersEndpoint';
   var postUrl = '$baseUrl/api/$postsEndpoint';
-  late dynamic response;
+  late Response response;
 
   Future<dynamic> signIn({
     required String email,
@@ -39,7 +37,7 @@ class ApiService {
   }) async {
     try {
       var body = {"fullName": fullName};
-      var response = await dio.post(
+      response = await dio.post(
         '$baseUrl/api/profile/me',
         options: Options(
           headers: {
@@ -55,10 +53,13 @@ class ApiService {
     }
   }
 
-  Future<dynamic> getProfile({required String token}) async {
+  getProfile({required String token, required int? userId}) async {
+    String endpoint = "api/users/$userId?populate=*";
     try {
-      var response = await dio.get(
-        '$baseUrl/api/profile/me',
+      // var response = await dio.get('$baseUrl/$endpoint');
+      response = await dio.get(
+        // '$baseUrl/api/profile/me',
+        "$baseUrl/$endpoint",
         options: Options(
           headers: {
             "Content-Type": "application/json",
@@ -70,13 +71,17 @@ class ApiService {
     } catch (e) {
       debugPrint(e.toString());
     }
+    // if (userId != null) {
+    // } else {
+    //   debugPrint("not userId");
+    // }
   }
 
   Future<User?> getUsers() async {
     try {
       response = await dio.get(usersUrl);
       if (response.statusCode == 200) {
-        User model = userFromJson(response.data.toString());
+        User model = User.fromJson(response.data);
         return model;
       } else {
         String error = jsonDecode(response.data.toString())['error']['message'];
@@ -98,7 +103,7 @@ class ApiService {
         },
       );
       if (response.statusCode == 201) {
-        User model = userFromJson(response.data.toString());
+        User model = User.fromJson(response.data);
         return model;
       } else {
         String error = jsonDecode(response.data.toString())['error']['message'];

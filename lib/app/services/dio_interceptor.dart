@@ -14,11 +14,14 @@ class DioInterceptor extends Interceptor {
   ) async {
     String? token = await getTokenService.get();
 
-    options.headers.addAll({
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-    });
-      return super.onRequest(options, handler);
+    if (token != null) {
+      options.headers.addAll({
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+    }
+
+    return super.onRequest(options, handler);
   }
 
   @override

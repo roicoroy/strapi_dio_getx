@@ -1,39 +1,35 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../model/cows.dart';
+import '../../../model/cow_logger.dart';
 import '../../../services/cow_looger_api.dart';
 
 class CowLoggerListController extends GetxController {
-  Iterable<dynamic> loggers = List<dynamic>.empty(growable: true).obs;
-  RxList<dynamic> list = List<dynamic>.empty(growable: true).obs;
+  RxList<CowLoggerDatum> list = List<CowLoggerDatum>.empty(growable: true).obs;
   final CowLoggerApiService apiService = CowLoggerApiService();
+
 
   @override
   void onInit() async {
     super.onInit();
-    // var myData = await apiService.getCowLoggers();
-    dynamic result = await apiService.getCowLoggers();
-    // loggers.value = myData['data'];
-    // var josTr = jsonEncode(result['data']);
-
-    var rest = Cow.cowFromJson(result['data']);
-    
-    // var myRes = cowLoggerToJson(myData);
-    // loggersx.value = cowLoggerFromJson(josTr);
-    // list.assignAll(cowListFromJson(rest.toString()));
-    // loggers.toList();
-
-    print(rest);
+    await getLogs();
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+    await getLogs();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  void submitForm() async {
+    var res = await apiService.saveNewLog();
+    await getLogs();
+  }
+
+  Future<void> getLogs() async {
+    var result = await apiService.getCowLoggers();
+    CowLogger test = CowLogger.fromJson(result);
+    list.assignAll(test.data);
   }
 }
