@@ -43,47 +43,47 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Obx(
-                () =>
-                    controller.selectedImagePath.value == ''
-                        ? Text(
-                          'Select an Image From Camera or Gallery',
-                          style: TextStyle(fontSize: 20),
-                        )
-                        : Image.file(File(controller.selectedImagePath.value)),
-              ),
+              // Obx(
+              //   () =>
+              //       controller.selectedImagePath.value == ''
+              //           ? Text(
+              //             'Select an Image From Camera or Gallery',
+              //             style: TextStyle(fontSize: 20),
+              //           )
+              //           : Image.file(File(controller.selectedImagePath.value)),
+              // ),
 
-              Obx(
-                () => Text(
-                  controller.selectedImageSize.value == ""
-                      ? ''
-                      : controller.selectedImageSize.value,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  controller.getImage(ImageSource.camera);
-                },
-                child: Text('Camera'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  controller.getImage(ImageSource.gallery);
-                },
-                child: Text('Gallery'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  controller.pickFiles();
-                },
-                child: Text('Pick Files'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  controller.uploadImage(controller.uploadFile);
-                },
-                child: Text('Upload Files'),
-              ),
+              // Obx(
+              //   () => Text(
+              //     controller.selectedImageSize.value == ""
+              //         ? ''
+              //         : controller.selectedImageSize.value,
+              //   ),
+              // ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     controller.getImage(ImageSource.camera);
+              //   },
+              //   child: Text('Camera'),
+              // ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     controller.getImage(ImageSource.gallery);
+              //   },
+              //   child: Text('Gallery'),
+              // ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     controller.pickFiles();
+              //   },
+              //   child: Text('Pick Files'),
+              // ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     // controller.uploadImage(controller.uploadFile);
+              //   },
+              //   child: Text('Upload Files'),
+              // ),
             ],
           ),
         ),

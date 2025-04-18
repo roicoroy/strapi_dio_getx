@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -22,16 +24,13 @@ class ProfileView extends GetView<ProfileController> {
                   CircleAvatar(
                     backgroundColor: Colors.grey,
                     radius: 36,
-                    child: Image.network(
-                      "${controller.profileImg.value}",
-                    ),
+                    child: Image.network("${controller.profileImg.value}"),
                   ),
                   const SizedBox(width: 10),
                   Column(
                     children: [
                       Text(
-                        controller.user.value?.email ??
-                        "Sign in your account",
+                        controller.user.value?.email ?? "Sign in your account",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
@@ -41,6 +40,15 @@ class ProfileView extends GetView<ProfileController> {
                         controller.user.value?.username ??
                             "Sign in your account",
                       ),
+                      ElevatedButton(
+                        onPressed: () => {controller.changeAvatar()},
+                        child: Text('change avatar'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => {controller.uploadImage(controller.uploadFile)},
+                        child: Text('upload'),
+                      ),
+                  
                     ],
                   ),
                 ],
@@ -48,6 +56,15 @@ class ProfileView extends GetView<ProfileController> {
             ),
           ),
           const SizedBox(height: 50),
+          Obx(
+            () =>
+                controller.selectedImagePath.value == ''
+                    ? Text(
+                      'Select an Image From Camera or Gallery',
+                      style: TextStyle(fontSize: 20),
+                    )
+                    : Image.file(File(controller.selectedImagePath.value)),
+          ),
         ],
       ),
     );

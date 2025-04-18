@@ -1,14 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:strapi_dio_getx/main.dart';
 
 import '../../../const.dart';
-import '../../model/user.dart' show User;
-import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
 class UploadService {
@@ -30,18 +27,18 @@ class UploadService {
     }
   }
 
-  Future<dynamic> uploadMediaFile(File file) async {
-    String fileName = file.path.split('/').last;
+  Future<Response> uploadMediaFile(Rxn<XFile> file) async {
+    // String fileName = file.value.path?.split('/');
     final formData = FormData.fromMap({
       'files': [
         await MultipartFile.fromFile(
-          file.path,
-          filename: fileName,
+          file.value!.path,
+          filename: 'test',
           contentType: MediaType("image", "jpg"),
         ),
       ],
     });
-    final response = await dio.post('$baseUrl/api/upload', data: formData);
+    response = await dio.post('$baseUrl/api/upload', data: formData);
     if (response.statusCode == 201) {
       return response;
     } else {

@@ -22,25 +22,23 @@ class HomeController extends GetxController {
   var selectedImageSize = "".obs;
 
   void getImage(ImageSource imageSource) async {
-    XFile? pickedFile = await ImagePicker().pickImage(
-      source: imageSource,
-      imageQuality: 50,
-    );
-    if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
-      uploadFile = imageFile;
-      selectedImagePath.value = pickedFile.path;
-      selectedImageSize.value =
-          "${((File(selectedImagePath.value)).lengthSync() / 1024 / 1024).toStringAsFixed(2)}MB";
-      print(selectedImagePath.value);
-      update();
-    } else {
-      Get.snackbar('Error', 'Image Not Selected');
+    try {
+      XFile? pickedFile = await ImagePicker().pickImage(
+        source: imageSource,
+        imageQuality: 50,
+      );
+      if (pickedFile != null) {
+        File imageFile = File(pickedFile.path);
+        uploadFile = imageFile;
+        selectedImagePath.value = pickedFile.path;
+        selectedImageSize.value =
+            "${((File(selectedImagePath.value)).lengthSync() / 1024 / 1024).toStringAsFixed(2)}MB";
+      } else {
+        Get.snackbar('Error', 'Image Not Selected');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
     }
-  }
-
-  uploadImage(File file) async {
-    await uploadApi.uploadMediaFile(file);
   }
 
   Future<FilePickerResult?> pickFiles() async {
@@ -56,6 +54,18 @@ class HomeController extends GetxController {
       Get.snackbar('Error', 'Image Not Selected');
     }
     return null;
+  }
+
+  uploadImage(Rxn<XFile> file) async {
+    EasyLoading.show(status: 'Loading...', dismissOnTap: false);
+    try {
+      await uploadApi.uploadMediaFile(file);
+    } catch (e) {
+      EasyLoading.showError('Something wrong. Try again!');
+      debugPrint(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
   }
 
   void logout() async {
