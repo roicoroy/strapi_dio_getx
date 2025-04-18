@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
+import '../../../model/user.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/network/api.dart';
 import '../../../services/local_get_storage.dart';
@@ -18,8 +19,6 @@ class RegisterController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmController = TextEditingController();
 
-
-
   signUp({
     required String fullName,
     required String email,
@@ -30,18 +29,17 @@ class RegisterController extends GetxController {
       var result = await apiService.signUp(email: email, password: password);
       if (result.statusCode == 200) {
         String token = result.data['jwt'];
-        storageService.addToken(token);
-        var userResult = await ApiService().createProfile(
-          fullName: fullName,
-          token: token,
-        );
-        if (userResult.statusCode == 200) {
-          storageService.addToken(token);
-          storageService.addUser(userResult.data);
-          Get.toNamed(Routes.HOME);
+        dynamic us = result.data['user'];
+        final dynamic userMap = json.encode(us);
+        User loggeedUser = User.fromJson(result.data);
+        // user.value = loggeedUser;
+        await storageService.addToken(token);
+        if (loggeedUser != null) {
+          await storageService.addUser(loggeedUser!);
         } else {
-          EasyLoading.showError('Something went wrong. Try again!');
+          throw Exception('User data is null');
         }
+        Get.toNamed(Routes.HOME);
       }
     } catch (e) {
       EasyLoading.showError('Something went wrong. Try again!');

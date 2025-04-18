@@ -15,8 +15,8 @@ class LocalGetStorageService {
   Future<String> getToken() async {
     return box.read('token');
   }
-  
-  Future<User> getStoredUser() async {
+
+  getStoredUser() async {
     return box.read('user');
   }
 
@@ -24,8 +24,8 @@ class LocalGetStorageService {
     box.write('token', token);
   }
 
-  addUser(user) async {
-    box.write('user', user.toString());
+  addUser(User user) async {
+    box.write('user', user);
   }
 
   Future removeTokenFromGetStorage(String boxName) async {

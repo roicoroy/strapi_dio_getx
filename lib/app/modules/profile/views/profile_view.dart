@@ -10,10 +10,7 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("PROFILE".tr),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text("PROFILE".tr), centerTitle: true),
       body: ListView(
         children: [
           const SizedBox(height: 20),
@@ -26,22 +23,23 @@ class ProfileView extends GetView<ProfileController> {
                     backgroundColor: Colors.grey,
                     radius: 36,
                     child: Image.network(
-                      "$baseUrl${controller.profileImg.value}",
+                      "${controller.profileImg.value}",
                     ),
                   ),
                   const SizedBox(width: 10),
                   Column(
                     children: [
                       Text(
-                        controller.user.value?.user?.email ??
-                            "Sign in your account",
+                        controller.user.value?.email ??
+                        "Sign in your account",
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
-                        controller.user.value?.user?.email ?? "Sign in your account",
+                        controller.user.value?.username ??
+                            "Sign in your account",
                       ),
                     ],
                   ),

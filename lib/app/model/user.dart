@@ -1,36 +1,5 @@
 class User {
     User({
-        required this.user,
-    });
-
-    final UserClass? user;
-
-    User copyWith({
-        UserClass? user,
-    }) {
-        return User(
-            user: user ?? this.user,
-        );
-    }
-
-    factory User.fromJson(Map<String, dynamic> json){ 
-        return User(
-            user: json["user"] == null ? null : UserClass.fromJson(json["user"]),
-        );
-    }
-
-    Map<String, dynamic> toJson() => {
-        "user": user?.toJson(),
-    };
-
-    @override
-    String toString(){
-        return "$user, ";
-    }
-}
-
-class UserClass {
-    UserClass({
         required this.id,
         required this.username,
         required this.email,
@@ -41,6 +10,7 @@ class UserClass {
         required this.updatedAt,
         required this.documentId,
         required this.publishedAt,
+        required this.image,
     });
 
     final int? id;
@@ -53,8 +23,9 @@ class UserClass {
     final DateTime? updatedAt;
     final String? documentId;
     final DateTime? publishedAt;
+    final Image? image;
 
-    UserClass copyWith({
+    User copyWith({
         int? id,
         String? username,
         String? email,
@@ -65,8 +36,9 @@ class UserClass {
         DateTime? updatedAt,
         String? documentId,
         DateTime? publishedAt,
+        Image? image,
     }) {
-        return UserClass(
+        return User(
             id: id ?? this.id,
             username: username ?? this.username,
             email: email ?? this.email,
@@ -77,11 +49,12 @@ class UserClass {
             updatedAt: updatedAt ?? this.updatedAt,
             documentId: documentId ?? this.documentId,
             publishedAt: publishedAt ?? this.publishedAt,
+            image: image ?? this.image,
         );
     }
 
-    factory UserClass.fromJson(Map<String, dynamic> json){ 
-        return UserClass(
+    factory User.fromJson(Map<String, dynamic> json){ 
+        return User(
             id: json["id"],
             username: json["username"],
             email: json["email"],
@@ -92,6 +65,7 @@ class UserClass {
             updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
             documentId: json["documentId"],
             publishedAt: DateTime.tryParse(json["publishedAt"] ?? ""),
+            image: json["image"] == null ? null : Image.fromJson(json["image"]),
         );
     }
 
@@ -106,10 +80,187 @@ class UserClass {
         "updatedAt": updatedAt?.toIso8601String(),
         "documentId": documentId,
         "publishedAt": publishedAt?.toIso8601String(),
+        "image": image?.toJson(),
     };
 
     @override
     String toString(){
-        return "$id, $username, $email, $provider, $confirmed, $blocked, $createdAt, $updatedAt, $documentId, $publishedAt, ";
+        return "$id, $username, $email, $provider, $confirmed, $blocked, $createdAt, $updatedAt, $documentId, $publishedAt, $image, ";
+    }
+}
+
+class Image {
+    Image({
+        required this.id,
+        required this.name,
+        required this.alternativeText,
+        required this.caption,
+        required this.width,
+        required this.height,
+        required this.formats,
+        required this.hash,
+        required this.ext,
+        required this.mime,
+        required this.size,
+        required this.url,
+        required this.previewUrl,
+        required this.provider,
+        required this.providerMetadata,
+        required this.createdAt,
+        required this.updatedAt,
+        required this.documentId,
+        required this.publishedAt,
+    });
+
+    final int? id;
+    final String? name;
+    final dynamic alternativeText;
+    final dynamic caption;
+    final int? width;
+    final int? height;
+    final dynamic formats;
+    final String? hash;
+    final String? ext;
+    final String? mime;
+    final double? size;
+    final String? url;
+    final dynamic previewUrl;
+    final String? provider;
+    final ProviderMetadata? providerMetadata;
+    final DateTime? createdAt;
+    final DateTime? updatedAt;
+    final String? documentId;
+    final DateTime? publishedAt;
+
+    Image copyWith({
+        int? id,
+        String? name,
+        dynamic? alternativeText,
+        dynamic? caption,
+        int? width,
+        int? height,
+        dynamic? formats,
+        String? hash,
+        String? ext,
+        String? mime,
+        double? size,
+        String? url,
+        dynamic? previewUrl,
+        String? provider,
+        ProviderMetadata? providerMetadata,
+        DateTime? createdAt,
+        DateTime? updatedAt,
+        String? documentId,
+        DateTime? publishedAt,
+    }) {
+        return Image(
+            id: id ?? this.id,
+            name: name ?? this.name,
+            alternativeText: alternativeText ?? this.alternativeText,
+            caption: caption ?? this.caption,
+            width: width ?? this.width,
+            height: height ?? this.height,
+            formats: formats ?? this.formats,
+            hash: hash ?? this.hash,
+            ext: ext ?? this.ext,
+            mime: mime ?? this.mime,
+            size: size ?? this.size,
+            url: url ?? this.url,
+            previewUrl: previewUrl ?? this.previewUrl,
+            provider: provider ?? this.provider,
+            providerMetadata: providerMetadata ?? this.providerMetadata,
+            createdAt: createdAt ?? this.createdAt,
+            updatedAt: updatedAt ?? this.updatedAt,
+            documentId: documentId ?? this.documentId,
+            publishedAt: publishedAt ?? this.publishedAt,
+        );
+    }
+
+    factory Image.fromJson(Map<String, dynamic> json){ 
+        return Image(
+            id: json["id"],
+            name: json["name"],
+            alternativeText: json["alternativeText"],
+            caption: json["caption"],
+            width: json["width"],
+            height: json["height"],
+            formats: json["formats"],
+            hash: json["hash"],
+            ext: json["ext"],
+            mime: json["mime"],
+            size: json["size"],
+            url: json["url"],
+            previewUrl: json["previewUrl"],
+            provider: json["provider"],
+            providerMetadata: json["provider_metadata"] == null ? null : ProviderMetadata.fromJson(json["provider_metadata"]),
+            createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
+            updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+            documentId: json["documentId"],
+            publishedAt: DateTime.tryParse(json["publishedAt"] ?? ""),
+        );
+    }
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "alternativeText": alternativeText,
+        "caption": caption,
+        "width": width,
+        "height": height,
+        "formats": formats,
+        "hash": hash,
+        "ext": ext,
+        "mime": mime,
+        "size": size,
+        "url": url,
+        "previewUrl": previewUrl,
+        "provider": provider,
+        "provider_metadata": providerMetadata?.toJson(),
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "documentId": documentId,
+        "publishedAt": publishedAt?.toIso8601String(),
+    };
+
+    @override
+    String toString(){
+        return "$id, $name, $alternativeText, $caption, $width, $height, $formats, $hash, $ext, $mime, $size, $url, $previewUrl, $provider, $providerMetadata, $createdAt, $updatedAt, $documentId, $publishedAt, ";
+    }
+}
+
+class ProviderMetadata {
+    ProviderMetadata({
+        required this.publicId,
+        required this.resourceType,
+    });
+
+    final String? publicId;
+    final String? resourceType;
+
+    ProviderMetadata copyWith({
+        String? publicId,
+        String? resourceType,
+    }) {
+        return ProviderMetadata(
+            publicId: publicId ?? this.publicId,
+            resourceType: resourceType ?? this.resourceType,
+        );
+    }
+
+    factory ProviderMetadata.fromJson(Map<String, dynamic> json){ 
+        return ProviderMetadata(
+            publicId: json["public_id"],
+            resourceType: json["resource_type"],
+        );
+    }
+
+    Map<String, dynamic> toJson() => {
+        "public_id": publicId,
+        "resource_type": resourceType,
+    };
+
+    @override
+    String toString(){
+        return "$publicId, $resourceType, ";
     }
 }

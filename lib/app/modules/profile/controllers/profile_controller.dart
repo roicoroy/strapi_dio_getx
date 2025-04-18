@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
@@ -10,42 +10,38 @@ import '../../../services/get_atored_user_service.dart';
 import '../../../services/local_get_storage.dart';
 
 class ProfileController extends GetxController {
-  Rxn<User> user = Rxn<User>();
+  Rxn<User?> user = Rxn<User>();
   Rxn<String> profileImg = Rxn<String>();
   final LocalGetStorageService storageService = LocalGetStorageService();
   final ApiService apiService = ApiService();
-  final GetStoredUserService storedUserService = GetStoredUserService();
   late Response response;
 
   @override
   void onInit() async {
     super.onInit();
-    var uss = getStoredUser();
-    print(uss);
+    await getMeProfile();
   }
 
-  getStoredUser() {
-    var us = storedUserService.user;
-
-    return us;
+  getMeProfile() async {
+    try {
+      EasyLoading.show(status: 'Loading...', dismissOnTap: false);
+      var response = await apiService.getProfile();
+      if (response.statusCode == 200) {
+        User profile = User.fromJson(response.data);
+        user.value = profile;
+        if (profile.image?.url != null) {
+          String? imgRewc = profile.image?.url;
+          profileImg.value = imgRewc;
+        } else {
+          EasyLoading.showError('User image is null!');
+          throw Exception('User image is null');
+        }
+      }
+    } catch (e) {
+      EasyLoading.showError('Something wrong. Try again!');
+      rethrow;
+    } finally {
+      EasyLoading.dismiss();
+    }
   }
-
-  // getMeProfile() async {
-  //   try {
-  //     EasyLoading.show(status: 'Loading...', dismissOnTap: false);
-  //     // response = await apiService.getProfile(token: token, userId: us.user?.id);
-  //     // var userJson = jsonEncode(response.data);
-  //     // User model = User.fromJson(response);
-  //     // String imgRewc = response.data['image']['url'];
-  //     // user.value = model;
-  //     // profileImg.value = imgRewc;
-  //     // return model;
-  //   } catch (e) {
-  //     EasyLoading.showError('Something wrong. Try again!');
-  //     debugPrint(e.toString());
-  //     rethrow;
-  //   } finally {
-  //     EasyLoading.dismiss();
-  //   }
-  // }
 }

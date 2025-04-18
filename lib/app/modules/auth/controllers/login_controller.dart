@@ -22,11 +22,16 @@ class LoginController extends GetxController {
       var result = await ApiService().signIn(email: email, password: password);
       if (result.statusCode == 200) {
         String token = result.data['jwt'];
-        // String us = result.data['user'];
-        User loggeedUser = User.fromJson(result?.data);
-        user.value = loggeedUser;
-        storageService.addToken(token);
-        storageService.addUser(loggeedUser.user);
+        dynamic us = result.data['user'];
+        final dynamic userMap = json.encode(us);
+        User loggeedUser = User.fromJson(result.data);
+        // user.value = loggeedUser;
+        await storageService.addToken(token);
+        if (loggeedUser != null) {
+          await storageService.addUser(loggeedUser!);
+        } else {
+          throw Exception('User data is null');
+        }
         Get.toNamed(Routes.HOME);
         // int? userId = loggeedUser.user?.id;
         // var userResult = await ApiService().getProfile(

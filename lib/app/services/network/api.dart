@@ -21,7 +21,7 @@ class ApiService {
       var body = {"identifier": email, "password": password};
 
       response = await dio.post(
-        '$baseUrl/api/auth/local',
+        '$strapiBaseUrl/api/auth/local',
         options: Options(headers: {"Content-Type": "application/json"}),
         data: jsonEncode(body),
       );
@@ -53,28 +53,13 @@ class ApiService {
     }
   }
 
-  getProfile({required String token, required int? userId}) async {
-    String endpoint = "api/users/$userId?populate=*";
+  getProfile() async {
     try {
-      // var response = await dio.get('$baseUrl/$endpoint');
-      response = await dio.get(
-        // '$baseUrl/api/profile/me',
-        "$baseUrl/$endpoint",
-        options: Options(
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
+      response = await dio.get('$baseUrl/api/users/me?populate=*');
       return response;
     } catch (e) {
       debugPrint(e.toString());
     }
-    // if (userId != null) {
-    // } else {
-    //   debugPrint("not userId");
-    // }
   }
 
   Future<User?> getUsers() async {
@@ -90,6 +75,7 @@ class ApiService {
     } catch (e) {
       log(e.toString());
     }
+    return null;
   }
 
   // Adding user
