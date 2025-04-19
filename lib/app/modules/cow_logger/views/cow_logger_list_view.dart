@@ -21,9 +21,9 @@ class CowLoggerListView extends GetView<CowLoggerController> {
           child: ListView.builder(
             itemCount: controller.list.value.length,
             itemBuilder: (context, index) {
-              final item = controller.list.value[index];
+              final item = controller.list.value[index].name;
               return ListTile(
-                title: Text('dd'),
+                title: Text(item.toString()),
                 onTap: () {
                   Get.toNamed(
                     Routes.COW_LOGGER_DETAILS,

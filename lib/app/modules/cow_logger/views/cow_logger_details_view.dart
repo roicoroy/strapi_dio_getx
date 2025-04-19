@@ -7,10 +7,8 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../components/input_text_button.dart';
 import '../../../components/input_text_field.dart';
-import '../../../model/cow_logger.dart';
-import '../../../routes/app_pages.dart';
+import '../../../model/cow_logger.dart' as cow_logger;
 import '../controllers/cow_logger_controller.dart';
-import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class CowLoggerDetailsView extends GetView<CowLoggerController> {
@@ -25,7 +23,7 @@ class CowLoggerDetailsView extends GetView<CowLoggerController> {
   @override
   Widget build(BuildContext context) {
     if (log != null) {
-      name = TextEditingController(text: log?.attributes?.name);
+      name = TextEditingController(text: log.name);
     }
     name = TextEditingController(text: 'test name');
     description = TextEditingController(text: 'test desc');
@@ -42,24 +40,6 @@ class CowLoggerDetailsView extends GetView<CowLoggerController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Spacer(),
-                // const Text(
-                //   "Strapi,",
-                //   style: TextStyle(
-                //     color: Colors.black,
-                //     fontSize: 32,
-                //     fontWeight: FontWeight.bold,
-                //   ),
-                // ),
-                // Text(
-                //   log != null ? 'Edit saved log' : 'Save new log',
-                //   style: const TextStyle(
-                //     color: Colors.grey,
-                //     fontSize: 22,
-                //     fontWeight: FontWeight.w400,
-                //     letterSpacing: 1.2,
-                //   ),
-                // ),
                 const Spacer(flex: 3),
                 InputTextField(
                   title: 'Name',
@@ -71,7 +51,7 @@ class CowLoggerDetailsView extends GetView<CowLoggerController> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 3),
                 InputTextField(
                   title: 'description',
                   textEditingController: description,
@@ -105,19 +85,19 @@ class CowLoggerDetailsView extends GetView<CowLoggerController> {
                   child: Text('Gallery'),
                 ),
                 const SizedBox(height: 10),
-                // Obx(
-                //   () =>
-                //       controller.selectedImagePath?.value == ''
-                //           ? Text(
-                //             'Select an Image From Camera or Gallery',
-                //             style: TextStyle(fontSize: 20),
-                //           )
-                //           : Image.file(
-                //             width: 200,
-                //             height: 200,
-                //             File(controller.selectedImagePath!.value),
-                //           ),
-                // ),
+                Obx(
+                  () =>
+                      controller.selectedImagePath?.value == ''
+                          ? Text(
+                            'Select an Image From Camera or Gallery',
+                            style: TextStyle(fontSize: 20),
+                          )
+                          : Image.file(
+                            width: 200,
+                            height: 200,
+                            File(controller.selectedImagePath!.value),
+                          ),
+                ),
                 const SizedBox(height: 20),
                 const Spacer(),
                 InputTextButton(

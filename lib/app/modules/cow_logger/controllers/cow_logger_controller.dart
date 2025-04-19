@@ -12,7 +12,7 @@ import '../../../services/cow_looger_api.dart';
 import '../../../services/network/upload.dart';
 
 class CowLoggerController extends GetxController {
-  RxList<Datum> list = List<Datum>.empty(growable: true).obs;
+  RxList<dynamic> list = List<dynamic>.empty(growable: true).obs;
   final CowLoggerApiService apiService = CowLoggerApiService();
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
@@ -22,14 +22,6 @@ class CowLoggerController extends GetxController {
   late Rxn<XFile> uploadFile;
   RxString? selectedImagePath = "".obs;
   RxString? selectedImageSize = "".obs;
-
-  // @override
-  // void onInit() async {
-  //   super.onInit();
-  //   await getLogs();
-  //   // textEditingController.text =
-  //   //     "${selectedDate.value.year}-${selectedDate.value.month}-${selectedDate.value.day}";
-  // }
 
   @override
   void onReady() async {
@@ -60,12 +52,7 @@ class CowLoggerController extends GetxController {
 
   Future<void> getLogs() async {
     var response = await apiService.getCowLoggers();
-    // var data = response.data;
-    // dynamic test = CowLogger.fromJson(data);
-    // // dynamic test = Datum.fromJson(data[0]);
     list.assignAll(response);
-    // list.toList();
-    return response;
   }
 
   void getImage(ImageSource imageSource) async {
