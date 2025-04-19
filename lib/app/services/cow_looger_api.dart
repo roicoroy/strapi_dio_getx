@@ -13,7 +13,7 @@ class CowLoggerApiService {
   var remoteUrl = '$baseUrl/api/strapi-cruds';
   late Response response;
 
-  Future<List<dynamic>> getCowLoggers() async {
+  Future<List<Datum>> getCowLoggers() async {
     try {
       response = await dio.get(cowUrl);
       CowLogger test = CowLogger.fromJson(response.data);

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/src/response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../model/cow_logger.dart';
@@ -12,7 +13,7 @@ import '../../../services/cow_looger_api.dart';
 import '../../../services/network/upload.dart';
 
 class CowLoggerController extends GetxController {
-  RxList<dynamic> list = List<dynamic>.empty(growable: true).obs;
+  RxList<Datum> list = List<Datum>.empty(growable: true).obs;
   final CowLoggerApiService apiService = CowLoggerApiService();
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
@@ -31,8 +32,6 @@ class CowLoggerController extends GetxController {
 
   void submitForm(String name, String description) async {
     DateTime postTime = selectedDate.value;
-    // print('submitForm $name, $description, ${postTime.toString()}');
-
     if (uploadFile.value!.path.isNotEmpty) {
       var uploadRes = await uploadApi.uploadMediaFile(uploadFile);
       ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
@@ -51,11 +50,19 @@ class CowLoggerController extends GetxController {
   }
 
   Future<void> getLogs() async {
-    var response = await apiService.getCowLoggers();
-    list.assignAll(response);
+    EasyLoading.show(status: 'Loading...', dismissOnTap: false);
+    try {
+      List<Datum> response = await apiService.getCowLoggers();
+      list.assignAll(response);
+    } catch (e) {
+      EasyLoading.showError('Something wrong on getLogs. Try again!');
+    } finally {
+      EasyLoading.dismiss();
+    }
   }
 
   void getImage(ImageSource imageSource) async {
+    EasyLoading.show(status: 'Loading...', dismissOnTap: false);
     try {
       XFile? pickedFile = await ImagePicker().pickImage(
         source: imageSource,
@@ -71,7 +78,10 @@ class CowLoggerController extends GetxController {
         Get.snackbar('Error', 'Image Not Selected');
       }
     } catch (e) {
+      EasyLoading.showError('Something wrong on getImage. Try again!');
       debugPrint(e.toString());
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 
@@ -84,8 +94,6 @@ class CowLoggerController extends GetxController {
     );
     if (picked != null && picked != selectedDate.value) {
       selectedDate.value = picked;
-      // textEditingController.text =
-      //     "${selectedDate.value.year}-${selectedDate.value.month}-${selectedDate.value.day}";
     }
   }
 }

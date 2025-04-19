@@ -14,7 +14,7 @@ import '../controllers/cow_logger_controller.dart';
 class CowLoggerDetailsView extends GetView<CowLoggerController> {
   CowLoggerDetailsView({super.key});
 
-  dynamic? log = Get.arguments['log'];
+  dynamic log = Get.arguments['log'];
   final formKey = GlobalKey<FormState>();
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
