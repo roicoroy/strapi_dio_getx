@@ -23,7 +23,7 @@ class LoginController extends GetxController {
       if (result.statusCode == 200) {
         String token = result.data['jwt'];
         dynamic us = result.data['user'];
-        final dynamic userMap = json.encode(us);
+        json.encode(us);
         User loggeedUser = User.fromJson(result.data);
         // user.value = loggeedUser;
         await storageService.addToken(token);
@@ -33,18 +33,6 @@ class LoginController extends GetxController {
           throw Exception('User data is null');
         }
         Get.toNamed(Routes.HOME);
-        // int? userId = loggeedUser.user?.id;
-        // var userResult = await ApiService().getProfile(
-        //   token: token,
-        //   userId: userId,
-        // );
-        // userResult;
-        // if (userResult.statusCode == 200) {
-        //   user.value = User.fromJson(userResult.data);
-        //   storageService.addToken(token);
-        //   storageService.addUser(userResult.data);
-        //   Get.toNamed(Routes.HOME);
-        // }
       }
     } catch (e) {
       EasyLoading.showError('Something wrong. Try again!');

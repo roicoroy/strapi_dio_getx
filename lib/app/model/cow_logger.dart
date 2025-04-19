@@ -4,11 +4,11 @@ class CowLogger {
         required this.meta,
     });
 
-    final List<CowLoggerDatum> data;
+    final List<Datum> data;
     final Meta? meta;
 
     CowLogger copyWith({
-        List<CowLoggerDatum>? data,
+        List<Datum>? data,
         Meta? meta,
     }) {
         return CowLogger(
@@ -19,7 +19,7 @@ class CowLogger {
 
     factory CowLogger.fromJson(Map<String, dynamic> json){ 
         return CowLogger(
-            data: json["data"] == null ? [] : List<CowLoggerDatum>.from(json["data"]!.map((x) => CowLoggerDatum.fromJson(x))),
+            data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
             meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
         );
     }
@@ -35,186 +35,88 @@ class CowLogger {
     }
 }
 
-class CowLoggerDatum {
-    CowLoggerDatum({
+class Datum {
+    Datum({
         required this.id,
-        required this.attributes,
-    });
-
-    final int? id;
-    final PurpleAttributes? attributes;
-
-    CowLoggerDatum copyWith({
-        int? id,
-        PurpleAttributes? attributes,
-    }) {
-        return CowLoggerDatum(
-            id: id ?? this.id,
-            attributes: attributes ?? this.attributes,
-        );
-    }
-
-    factory CowLoggerDatum.fromJson(Map<String, dynamic> json){ 
-        return CowLoggerDatum(
-            id: json["id"],
-            attributes: json["attributes"] == null ? null : PurpleAttributes.fromJson(json["attributes"]),
-        );
-    }
-
-    Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes?.toJson(),
-    };
-
-    @override
-    String toString(){
-        return "$id, $attributes, ";
-    }
-}
-
-class PurpleAttributes {
-    PurpleAttributes({
+        required this.documentId,
         required this.name,
         required this.description,
         required this.date,
         required this.createdAt,
         required this.updatedAt,
         required this.publishedAt,
-        required this.usersPermissionsUser,
-        required this.images,
+        required this.image,
     });
 
+    final int? id;
+    final String? documentId;
     final String? name;
     final String? description;
     final DateTime? date;
     final DateTime? createdAt;
     final DateTime? updatedAt;
     final DateTime? publishedAt;
-    final UsersPermissionsUser? usersPermissionsUser;
-    final Images? images;
+    final Image? image;
 
-    PurpleAttributes copyWith({
+    Datum copyWith({
+        int? id,
+        String? documentId,
         String? name,
         String? description,
         DateTime? date,
         DateTime? createdAt,
         DateTime? updatedAt,
         DateTime? publishedAt,
-        UsersPermissionsUser? usersPermissionsUser,
-        Images? images,
+        Image? image,
     }) {
-        return PurpleAttributes(
+        return Datum(
+            id: id ?? this.id,
+            documentId: documentId ?? this.documentId,
             name: name ?? this.name,
             description: description ?? this.description,
             date: date ?? this.date,
             createdAt: createdAt ?? this.createdAt,
             updatedAt: updatedAt ?? this.updatedAt,
             publishedAt: publishedAt ?? this.publishedAt,
-            usersPermissionsUser: usersPermissionsUser ?? this.usersPermissionsUser,
-            images: images ?? this.images,
+            image: image ?? this.image,
         );
     }
 
-    factory PurpleAttributes.fromJson(Map<String, dynamic> json){ 
-        return PurpleAttributes(
+    factory Datum.fromJson(Map<String, dynamic> json){ 
+        return Datum(
+            id: json["id"],
+            documentId: json["documentId"],
             name: json["name"],
             description: json["description"],
             date: DateTime.tryParse(json["date"] ?? ""),
             createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
             updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
             publishedAt: DateTime.tryParse(json["publishedAt"] ?? ""),
-            usersPermissionsUser: json["users_permissions_user"] == null ? null : UsersPermissionsUser.fromJson(json["users_permissions_user"]),
-            images: json["images"] == null ? null : Images.fromJson(json["images"]),
-        );
-    }
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "description": description,
-        "date": date?.toIso8601String(),
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "publishedAt": publishedAt?.toIso8601String(),
-        "users_permissions_user": usersPermissionsUser?.toJson(),
-        "images": images?.toJson(),
-    };
-
-    @override
-    String toString(){
-        return "$name, $description, $date, $createdAt, $updatedAt, $publishedAt, $usersPermissionsUser, $images, ";
-    }
-}
-
-class Images {
-    Images({
-        required this.data,
-    });
-
-    final List<ImagesDatum> data;
-
-    Images copyWith({
-        List<ImagesDatum>? data,
-    }) {
-        return Images(
-            data: data ?? this.data,
-        );
-    }
-
-    factory Images.fromJson(Map<String, dynamic> json){ 
-        return Images(
-            data: json["data"] == null ? [] : List<ImagesDatum>.from(json["data"]!.map((x) => ImagesDatum.fromJson(x))),
-        );
-    }
-
-    Map<String, dynamic> toJson() => {
-        "data": data.map((x) => x?.toJson()).toList(),
-    };
-
-    @override
-    String toString(){
-        return "$data, ";
-    }
-}
-
-class ImagesDatum {
-    ImagesDatum({
-        required this.id,
-        required this.attributes,
-    });
-
-    final int? id;
-    final FluffyAttributes? attributes;
-
-    ImagesDatum copyWith({
-        int? id,
-        FluffyAttributes? attributes,
-    }) {
-        return ImagesDatum(
-            id: id ?? this.id,
-            attributes: attributes ?? this.attributes,
-        );
-    }
-
-    factory ImagesDatum.fromJson(Map<String, dynamic> json){ 
-        return ImagesDatum(
-            id: json["id"],
-            attributes: json["attributes"] == null ? null : FluffyAttributes.fromJson(json["attributes"]),
+            image: json["image"] == null ? null : Image.fromJson(json["image"]),
         );
     }
 
     Map<String, dynamic> toJson() => {
         "id": id,
-        "attributes": attributes?.toJson(),
+        "documentId": documentId,
+        "name": name,
+        "description": description,
+        "date": "${date?.toIso8601String()}",
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "publishedAt": publishedAt?.toIso8601String(),
+        "image": image?.toString(),
     };
 
     @override
     String toString(){
-        return "$id, $attributes, ";
+        return "$id, $documentId, $name, $description, $date, $createdAt, $updatedAt, $publishedAt, $image, ";
     }
 }
 
-class FluffyAttributes {
-    FluffyAttributes({
+class Image {
+    Image({
+        required this.id,
         required this.name,
         required this.alternativeText,
         required this.caption,
@@ -231,11 +133,14 @@ class FluffyAttributes {
         required this.providerMetadata,
         required this.createdAt,
         required this.updatedAt,
+        required this.documentId,
+        required this.publishedAt,
     });
 
+    final int? id;
     final String? name;
-    final String? alternativeText;
-    final String? caption;
+    final dynamic alternativeText;
+    final dynamic caption;
     final int? width;
     final int? height;
     final Formats? formats;
@@ -246,14 +151,17 @@ class FluffyAttributes {
     final String? url;
     final dynamic previewUrl;
     final String? provider;
-    final dynamic providerMetadata;
+    final ProviderMetadata? providerMetadata;
     final DateTime? createdAt;
     final DateTime? updatedAt;
+    final String? documentId;
+    final DateTime? publishedAt;
 
-    FluffyAttributes copyWith({
+    Image copyWith({
+        int? id,
         String? name,
-        String? alternativeText,
-        String? caption,
+        dynamic? alternativeText,
+        dynamic? caption,
         int? width,
         int? height,
         Formats? formats,
@@ -264,11 +172,14 @@ class FluffyAttributes {
         String? url,
         dynamic? previewUrl,
         String? provider,
-        dynamic? providerMetadata,
+        ProviderMetadata? providerMetadata,
         DateTime? createdAt,
         DateTime? updatedAt,
+        String? documentId,
+        DateTime? publishedAt,
     }) {
-        return FluffyAttributes(
+        return Image(
+            id: id ?? this.id,
             name: name ?? this.name,
             alternativeText: alternativeText ?? this.alternativeText,
             caption: caption ?? this.caption,
@@ -285,11 +196,14 @@ class FluffyAttributes {
             providerMetadata: providerMetadata ?? this.providerMetadata,
             createdAt: createdAt ?? this.createdAt,
             updatedAt: updatedAt ?? this.updatedAt,
+            documentId: documentId ?? this.documentId,
+            publishedAt: publishedAt ?? this.publishedAt,
         );
     }
 
-    factory FluffyAttributes.fromJson(Map<String, dynamic> json){ 
-        return FluffyAttributes(
+    factory Image.fromJson(Map<String, dynamic> json){ 
+        return Image(
+            id: json["id"],
             name: json["name"],
             alternativeText: json["alternativeText"],
             caption: json["caption"],
@@ -303,13 +217,16 @@ class FluffyAttributes {
             url: json["url"],
             previewUrl: json["previewUrl"],
             provider: json["provider"],
-            providerMetadata: json["provider_metadata"],
+            providerMetadata: json["provider_metadata"] == null ? null : ProviderMetadata.fromJson(json["provider_metadata"]),
             createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
             updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
+            documentId: json["documentId"],
+            publishedAt: DateTime.tryParse(json["publishedAt"] ?? ""),
         );
     }
 
     Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "alternativeText": alternativeText,
         "caption": caption,
@@ -323,14 +240,16 @@ class FluffyAttributes {
         "url": url,
         "previewUrl": previewUrl,
         "provider": provider,
-        "provider_metadata": providerMetadata,
+        "provider_metadata": providerMetadata?.toJson(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
+        "documentId": documentId,
+        "publishedAt": publishedAt?.toIso8601String(),
     };
 
     @override
     String toString(){
-        return "$name, $alternativeText, $caption, $width, $height, $formats, $hash, $ext, $mime, $size, $url, $previewUrl, $provider, $providerMetadata, $createdAt, $updatedAt, ";
+        return "$id, $name, $alternativeText, $caption, $width, $height, $formats, $hash, $ext, $mime, $size, $url, $previewUrl, $provider, $providerMetadata, $createdAt, $updatedAt, $documentId, $publishedAt, ";
     }
 }
 
@@ -394,6 +313,8 @@ class Large {
         required this.size,
         required this.width,
         required this.height,
+        required this.sizeInBytes,
+        required this.providerMetadata,
     });
 
     final String? ext;
@@ -405,6 +326,8 @@ class Large {
     final double? size;
     final int? width;
     final int? height;
+    final int? sizeInBytes;
+    final ProviderMetadata? providerMetadata;
 
     Large copyWith({
         String? ext,
@@ -416,6 +339,8 @@ class Large {
         double? size,
         int? width,
         int? height,
+        int? sizeInBytes,
+        ProviderMetadata? providerMetadata,
     }) {
         return Large(
             ext: ext ?? this.ext,
@@ -427,6 +352,8 @@ class Large {
             size: size ?? this.size,
             width: width ?? this.width,
             height: height ?? this.height,
+            sizeInBytes: sizeInBytes ?? this.sizeInBytes,
+            providerMetadata: providerMetadata ?? this.providerMetadata,
         );
     }
 
@@ -441,6 +368,8 @@ class Large {
             size: json["size"],
             width: json["width"],
             height: json["height"],
+            sizeInBytes: json["sizeInBytes"],
+            providerMetadata: json["provider_metadata"] == null ? null : ProviderMetadata.fromJson(json["provider_metadata"]),
         );
     }
 
@@ -454,146 +383,50 @@ class Large {
         "size": size,
         "width": width,
         "height": height,
+        "sizeInBytes": sizeInBytes,
+        "provider_metadata": providerMetadata?.toJson(),
     };
 
     @override
     String toString(){
-        return "$ext, $url, $hash, $mime, $name, $path, $size, $width, $height, ";
+        return "$ext, $url, $hash, $mime, $name, $path, $size, $width, $height, $sizeInBytes, $providerMetadata, ";
     }
 }
 
-class UsersPermissionsUser {
-    UsersPermissionsUser({
-        required this.data,
+class ProviderMetadata {
+    ProviderMetadata({
+        required this.publicId,
+        required this.resourceType,
     });
 
-    final Data? data;
+    final String? publicId;
+    final String? resourceType;
 
-    UsersPermissionsUser copyWith({
-        Data? data,
+    ProviderMetadata copyWith({
+        String? publicId,
+        String? resourceType,
     }) {
-        return UsersPermissionsUser(
-            data: data ?? this.data,
+        return ProviderMetadata(
+            publicId: publicId ?? this.publicId,
+            resourceType: resourceType ?? this.resourceType,
         );
     }
 
-    factory UsersPermissionsUser.fromJson(Map<String, dynamic> json){ 
-        return UsersPermissionsUser(
-            data: json["data"] == null ? null : Data.fromJson(json["data"]),
+    factory ProviderMetadata.fromJson(Map<String, dynamic> json){ 
+        return ProviderMetadata(
+            publicId: json["public_id"],
+            resourceType: json["resource_type"],
         );
     }
 
     Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
+        "public_id": publicId,
+        "resource_type": resourceType,
     };
 
     @override
     String toString(){
-        return "$data, ";
-    }
-}
-
-class Data {
-    Data({
-        required this.id,
-        required this.attributes,
-    });
-
-    final int? id;
-    final DataAttributes? attributes;
-
-    Data copyWith({
-        int? id,
-        DataAttributes? attributes,
-    }) {
-        return Data(
-            id: id ?? this.id,
-            attributes: attributes ?? this.attributes,
-        );
-    }
-
-    factory Data.fromJson(Map<String, dynamic> json){ 
-        return Data(
-            id: json["id"],
-            attributes: json["attributes"] == null ? null : DataAttributes.fromJson(json["attributes"]),
-        );
-    }
-
-    Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes?.toJson(),
-    };
-
-    @override
-    String toString(){
-        return "$id, $attributes, ";
-    }
-}
-
-class DataAttributes {
-    DataAttributes({
-        required this.username,
-        required this.email,
-        required this.provider,
-        required this.confirmed,
-        required this.blocked,
-        required this.createdAt,
-        required this.updatedAt,
-    });
-
-    final String? username;
-    final String? email;
-    final String? provider;
-    final bool? confirmed;
-    final bool? blocked;
-    final DateTime? createdAt;
-    final DateTime? updatedAt;
-
-    DataAttributes copyWith({
-        String? username,
-        String? email,
-        String? provider,
-        bool? confirmed,
-        bool? blocked,
-        DateTime? createdAt,
-        DateTime? updatedAt,
-    }) {
-        return DataAttributes(
-            username: username ?? this.username,
-            email: email ?? this.email,
-            provider: provider ?? this.provider,
-            confirmed: confirmed ?? this.confirmed,
-            blocked: blocked ?? this.blocked,
-            createdAt: createdAt ?? this.createdAt,
-            updatedAt: updatedAt ?? this.updatedAt,
-        );
-    }
-
-    factory DataAttributes.fromJson(Map<String, dynamic> json){ 
-        return DataAttributes(
-            username: json["username"],
-            email: json["email"],
-            provider: json["provider"],
-            confirmed: json["confirmed"],
-            blocked: json["blocked"],
-            createdAt: DateTime.tryParse(json["createdAt"] ?? ""),
-            updatedAt: DateTime.tryParse(json["updatedAt"] ?? ""),
-        );
-    }
-
-    Map<String, dynamic> toJson() => {
-        "username": username,
-        "email": email,
-        "provider": provider,
-        "confirmed": confirmed,
-        "blocked": blocked,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-    };
-
-    @override
-    String toString(){
-        return "$username, $email, $provider, $confirmed, $blocked, $createdAt, $updatedAt, ";
+        return "$publicId, $resourceType, ";
     }
 }
 

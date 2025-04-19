@@ -4,12 +4,13 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../routes/app_pages.dart';
-import '../controllers/cow_logger_list_controller.dart';
+import '../controllers/cow_logger_controller.dart';
 
-class CowLoggerListView extends GetView<CowLoggerListController> {
-  CowLoggerListView({super.key});
+class CowLoggerListView extends GetView<CowLoggerController> {
+  const CowLoggerListView({super.key});
+
   @override
-  CowLoggerListController get controller => Get.find<CowLoggerListController>();
+  CowLoggerController get controller => Get.find<CowLoggerController>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,9 @@ class CowLoggerListView extends GetView<CowLoggerListController> {
           child: ListView.builder(
             itemCount: controller.list.value.length,
             itemBuilder: (context, index) {
-              final item = controller.list.value[index].attributes?.name;
+              final item = controller.list.value[index];
               return ListTile(
-                title: Text(item ?? 'fd'),
+                title: Text('dd'),
                 onTap: () {
                   Get.toNamed(
                     Routes.COW_LOGGER_DETAILS,

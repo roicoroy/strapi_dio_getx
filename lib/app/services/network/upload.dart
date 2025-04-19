@@ -28,7 +28,7 @@ class UploadService {
   }
 
   Future<Response> uploadMediaFile(Rxn<XFile> file) async {
-    // String fileName = file.value.path?.split('/');
+    List<String>? fileName = file.value?.path?.split('/');
     final formData = FormData.fromMap({
       'files': [
         await MultipartFile.fromFile(
@@ -44,5 +44,36 @@ class UploadService {
     } else {
       throw Exception('Failed to upload media file');
     }
+  }
+
+  Future<Response?> updateUserAvatar(int? userId, int? imageId) async {
+    try {
+      var postData = {"image": imageId};
+      var url = '$baseUrl/api/users/$userId';
+      response = await dio.put(url, data: postData);
+
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<dynamic> uploadPhotos(List<String> paths) async {
+    List<MultipartFile> files = [];
+    for (var path in paths) {
+      files.add(await MultipartFile.fromFile(path));
+    }
+
+    var formData = FormData.fromMap({'files': files});
+
+    var response = await Dio().post(
+      'http://10.0.0.101:5000/profile/upload-mutiple',
+      data: formData,
+    );
+    print('\n\n');
+    print('RESPONSE WITH DIO');
+    print(response.data);
+    print('\n\n');
+    return response.data;
   }
 }

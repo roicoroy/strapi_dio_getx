@@ -22,9 +22,11 @@ class ProfileView extends GetView<ProfileController> {
               child: Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    radius: 36,
-                    child: Image.network("${controller.profileImg.value}"),
+                    radius: 50,
+                    child:
+                        controller.profileImg.value != null
+                            ? Image.network("${controller.profileImg.value}")
+                            : Image.asset("assets/user_image.png"),
                   ),
                   const SizedBox(width: 10),
                   Column(
@@ -45,10 +47,14 @@ class ProfileView extends GetView<ProfileController> {
                         child: Text('change avatar'),
                       ),
                       ElevatedButton(
-                        onPressed: () => {controller.uploadImage(controller.uploadFile)},
+                        onPressed:
+                            () => {
+                              controller.uploadProfileImage(
+                                controller.uploadFile,
+                              ),
+                            },
                         child: Text('upload'),
                       ),
-                  
                     ],
                   ),
                 ],
@@ -58,12 +64,12 @@ class ProfileView extends GetView<ProfileController> {
           const SizedBox(height: 50),
           Obx(
             () =>
-                controller.selectedImagePath.value == ''
+                controller.selectedImagePath!.value == ''
                     ? Text(
                       'Select an Image From Camera or Gallery',
                       style: TextStyle(fontSize: 20),
                     )
-                    : Image.file(File(controller.selectedImagePath.value)),
+                    : Image.file(File(controller.selectedImagePath!.value)),
           ),
         ],
       ),

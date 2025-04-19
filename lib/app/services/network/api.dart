@@ -127,17 +127,4 @@ class ApiService {
       debugPrint(e.toString());
     }
   }
-
-  Future<Response?> updateUserAvatar(int? userId, int? imageId) async {
-    try {
-      var postData = {"image": imageId};
-      var url = '$baseUrl/api/users/$userId';
-      response = await dio.put(url, data: postData);
-
-      return response;
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-    return null;
-  }
 }

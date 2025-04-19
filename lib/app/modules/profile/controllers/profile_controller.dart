@@ -18,10 +18,8 @@ class ProfileController extends GetxController {
   final LocalGetStorageService storageService = LocalGetStorageService();
   final ApiService apiService = ApiService();
   final UploadService uploadApi = UploadService();
-  // late Response response;
   Rxn<XFile> uploadFile = Rxn<XFile>();
-  // late File uploadFile;
-  var selectedImagePath = "".obs;
+  RxString? selectedImagePath = "".obs;
   var selectedImageSize = "".obs;
 
   @override
@@ -39,29 +37,36 @@ class ProfileController extends GetxController {
       if (pickedFile != null) {
         Rxn<XFile> imageFile = Rxn<XFile>(pickedFile);
         uploadFile = imageFile;
-        selectedImagePath.value = pickedFile.path;
+        selectedImagePath?.value = pickedFile.path;
         selectedImageSize.value =
-            "${((File(selectedImagePath.value)).lengthSync() / 1024 / 1024).toStringAsFixed(2)}MB";
+            "${((File(selectedImagePath!.value)).lengthSync() / 1024 / 1024).toStringAsFixed(2)}MB";
       } else {
         Get.snackbar('Error', 'Image Not Selected');
       }
     } catch (e) {
       debugPrint(e.toString());
+      Get.snackbar('Error', 'change avatat');
     }
   }
 
-  void uploadImage(Rxn<XFile> file) async {
+  void uploadProfileImage(Rxn<XFile> file) async {
     EasyLoading.show(status: 'Loading...', dismissOnTap: false);
     try {
       var res = await uploadApi.uploadMediaFile(file);
-      ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(res.data[0]);
-      var resA = await apiService.updateUserAvatar(user.value?.id, updateImageId.id);
+      ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
+        res.data[0],
+      );
+      var resA = await uploadApi.updateUserAvatar(
+        user.value?.id,
+        updateImageId.id,
+      );
       if (resA?.statusCode == 200) {
-       getMeProfile();
+        selectedImagePath?.value = '';
+        getMeProfile();
       }
     } catch (e) {
       EasyLoading.showError('Something wrong on uploadImage. Try again!');
-      debugPrint(e.toString());
+      rethrow;
     } finally {
       EasyLoading.dismiss();
     }
