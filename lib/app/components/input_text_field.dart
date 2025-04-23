@@ -18,24 +18,24 @@ class InputTextField extends StatefulWidget {
   final double? width;
   final double? height;
 
-  const InputTextField(
-      {Key? key,
-        this.width,
-        this.height,
-        this.validation,
-        this.textEditingController,
-        this.hint = "",
-        this.onChange,
-        this.textInputType,
-        required this.title,
-        this.inputFormatters,
-        this.enable = true,
-        this.initialValue,
-        this.obsecureText = false,
-        this.textAlign = TextAlign.left,
-        this.onEditComplete,
-        this.textInputAction = TextInputAction.next})
-      : super(key: key);
+  const InputTextField({
+    Key? key,
+    this.width,
+    this.height,
+    this.validation,
+    this.textEditingController,
+    this.hint = "",
+    this.onChange,
+    this.textInputType,
+    required this.title,
+    this.inputFormatters,
+    this.enable = true,
+    this.initialValue,
+    this.obsecureText = false,
+    this.textAlign = TextAlign.left,
+    this.onEditComplete,
+    this.textInputAction = TextInputAction.next,
+  }) : super(key: key);
 
   @override
   State<InputTextField> createState() => _InputTextFieldState();
@@ -59,8 +59,9 @@ class _InputTextFieldState extends State<InputTextField> {
         textDirection: TextDirection.ltr,
         controller: widget.textEditingController,
         initialValue: widget.initialValue,
-        validator: widget.validation ??
-                (val) {
+        validator:
+            widget.validation ??
+            (val) {
               return null;
             },
         keyboardType: widget.textInputType,
@@ -74,54 +75,67 @@ class _InputTextFieldState extends State<InputTextField> {
         },
         onEditingComplete: widget.onEditComplete,
         obscureText: _isVisible,
-        style:
-        const TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
+        onTapOutside: (event) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        },
+        style: const TextStyle(
+          fontSize: 12.0,
+          height: 2.0,
+          color: Colors.black,
+        ),
         textAlign: widget.textAlign,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-            hintText: widget.hint,
-            labelText: widget.title,
-            labelStyle: const TextStyle(
-                color: Colors.black54
-            ),
-            suffixIcon: widget.obsecureText
-                ? GestureDetector(
-              child: _isVisible
-                  ? const Icon(
-                Icons.visibility_off,
-                size: 18,
-                color: Colors.grey,
-              )
-                  : const Icon(
-                Icons.visibility,
-                size: 18,
-                color: Colors.grey,
-              ),
-              onTap: () => setState(() {
-                _isVisible = !_isVisible;
-              }),
-            )
-                : null,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 10,
-                vertical: 5),
-            hintStyle:
-            const TextStyle(fontWeight: FontWeight.w300, fontSize: 11),
-            border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(width: 1, color: Colors.black26),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(width: 1, color: Colors.black26),
-            ),
-            errorBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(width: 1, color: Colors.black26),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              borderSide: BorderSide(width: 1, color: Colors.black26),
-            )),
+          hintText: widget.hint,
+          labelText: widget.title,
+          labelStyle: const TextStyle(color: Colors.black54),
+          suffixIcon:
+              widget.obsecureText
+                  ? GestureDetector(
+                    child:
+                        _isVisible
+                            ? const Icon(
+                              Icons.visibility_off,
+                              size: 18,
+                              color: Colors.grey,
+                            )
+                            : const Icon(
+                              Icons.visibility,
+                              size: 18,
+                              color: Colors.grey,
+                            ),
+                    onTap:
+                        () => setState(() {
+                          _isVisible = !_isVisible;
+                        }),
+                  )
+                  : null,
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 5,
+          ),
+          hintStyle: const TextStyle(fontWeight: FontWeight.w300, fontSize: 11),
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(width: 1, color: Colors.black26),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(width: 1, color: Colors.black26),
+          ),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(width: 1, color: Colors.black26),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(width: 1, color: Colors.black26),
+          ),
+        ),
       ),
     );
   }

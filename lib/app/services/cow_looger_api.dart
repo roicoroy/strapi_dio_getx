@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:strapi_dio_getx/app/model/cow_logger.dart';
@@ -28,7 +26,7 @@ class CowLoggerApiService {
     required String name,
     required String description,
     required DateTime postTime,
-    String? imageId = "58",
+    String? imageId,
   }) async {
     var postData = {
       "data": {
@@ -40,6 +38,30 @@ class CowLoggerApiService {
     };
 
     Response response = await dio.post(postCowUrl, data: postData);
+    return response;
+  }
+
+  Future<Response> updateLog({
+    required String documentId,
+    required String name,
+    required String description,
+    required DateTime postTime,
+    String? imageId,
+  }) async {
+    print(documentId);
+    var postData = {
+      "data": {
+        "name": name,
+        "description": description,
+        // "image": imageId,
+        "date": postTime.toString(),
+      },
+    };
+
+    Response response = await dio.put(
+      "$baseUrl/api/$cowLoggerEndpoint/$documentId",
+      data: postData,
+    );
     return response;
   }
 

@@ -5,28 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../components/input_text_button.dart';
 import '../../../components/input_text_field.dart';
-import '../../../model/cow_logger.dart' as cow_logger;
-import '../controllers/cow_logger_controller.dart';
+import '../controllers/cow_logger_details_controller.dart';
 
 // ignore: must_be_immutable
-class CowLoggerDetailsView extends GetView<CowLoggerController> {
+class CowLoggerDetailsView extends GetView<CowLoggerDetailsController> {
   CowLoggerDetailsView({super.key});
+  final CowLoggerDetailsController ctr = Get.put(CowLoggerDetailsController());
 
+  // cow_logger.Datum? log = Get.arguments['log'];
   dynamic log = Get.arguments['log'];
   final formKey = GlobalKey<FormState>();
-  TextEditingController name = TextEditingController();
-  TextEditingController description = TextEditingController();
-  TextEditingController date = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    ctr.setUpLog(log);
     if (log != null) {
-      name = TextEditingController(text: log.name);
+      ctr.isEdit?.value = true;
+    } else {
+      ctr.isEdit?.value = false;
     }
-    name = TextEditingController(text: 'test name');
-    description = TextEditingController(text: 'test desc');
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('CowLoggerDetailsView'),
@@ -40,10 +39,10 @@ class CowLoggerDetailsView extends GetView<CowLoggerController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Spacer(flex: 3),
+                const Spacer(flex: 1),
                 InputTextField(
                   title: 'Name',
-                  textEditingController: name,
+                  textEditingController: controller.name,
                   validation: (String? value) {
                     if (value == null || value.isEmpty) {
                       return "This field can't be empty";
@@ -54,7 +53,7 @@ class CowLoggerDetailsView extends GetView<CowLoggerController> {
                 const SizedBox(height: 3),
                 InputTextField(
                   title: 'description',
-                  textEditingController: description,
+                  textEditingController: controller.description,
                   validation: (String? value) {
                     if (value == null || value.isEmpty) {
                       return "This field can't be empty";
@@ -87,32 +86,48 @@ class CowLoggerDetailsView extends GetView<CowLoggerController> {
                 const SizedBox(height: 10),
                 Obx(
                   () =>
-                      controller.selectedImagePath?.value == ''
-                          ? Text(
-                            'Select an Image From Camera or Gallery',
-                            style: TextStyle(fontSize: 20),
-                          )
-                          : Image.file(
+                      controller.selectedImagePath?.value != ""
+                          ? Image.file(
                             width: 200,
                             height: 200,
                             File(controller.selectedImagePath!.value),
-                          ),
+                          )
+                          : const SizedBox(),
                 ),
                 const SizedBox(height: 20),
                 const Spacer(),
-                InputTextButton(
-                  title: "Submit",
-                  onClick: () {
-                    if (formKey.currentState!.validate()) {
-                      controller.submitForm(name.text, description.text);
-                    }
-                  },
+                Obx(
+                  () =>
+                      controller.remoteImagePath?.value != ""
+                          ? Image.network(
+                            controller.remoteImagePath!.value,
+                            width: 200,
+                            height: 200,
+                          )
+                          : const SizedBox(),
                 ),
-                const Spacer(flex: 5),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
+                const Spacer(),
               ],
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  return ctr.isEdit!.value
+                      ? controller.updateLog()
+                      : controller.saveNewLog();
+                }
+              },
+              child: Text(ctr.isEdit!.value ? 'updateLog' : 'saveNewLog'),
+            ),
+          ],
         ),
       ),
     );
