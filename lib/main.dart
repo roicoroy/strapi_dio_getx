@@ -14,6 +14,7 @@ import 'app/routes/app_pages.dart';
 import 'const.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'hero_animation.dart';
 import 'theme/app_theme.dart';
 
 final dio = Dio(); // With default `Options`.
@@ -55,6 +56,7 @@ void main() async {
       themeMode: ThemeMode.dark,
     ),
   );
+  // runApp(MaterialApp(home: MyApp()));
 }
 
 configLoading() async {

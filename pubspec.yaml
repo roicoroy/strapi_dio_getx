@@ -43,3 +43,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/beachball-alpha.png
+    - assets/binoculars-alpha.png
+    - assets/chair-alpha.png
