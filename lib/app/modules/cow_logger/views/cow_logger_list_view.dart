@@ -74,7 +74,7 @@ class CardFb1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: onPressed,
+      onTap: onPressed,
       child: Container(
         width: 150,
         height: 150,
@@ -93,6 +93,7 @@ class CardFb1 extends StatelessWidget {
         ),
         child: Column(
           children: [
+            const SizedBox(height: 5),
             InkWell(
               onTap: onPressed,
               child: CircleAvatar(
@@ -112,8 +113,7 @@ class CardFb1 extends StatelessWidget {
                         ),
               ),
             ),
-
-            const Spacer(),
+            const SizedBox(height: 5),
             Text(
               text,
               textAlign: TextAlign.center,
@@ -133,7 +133,7 @@ class CardFb1 extends StatelessWidget {
                 fontSize: 12,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
           ],
         ),
       ),
@@ -173,7 +173,7 @@ class SocialPictureGroup extends StatelessWidget {
                 child: Image.network(imgUrl, fit: BoxFit.fitWidth),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(22)),
-                  // color: Colors.red
+                  color: Colors.red,
                 ),
                 clipBehavior: Clip.antiAlias,
               ),

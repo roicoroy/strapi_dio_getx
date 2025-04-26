@@ -45,13 +45,13 @@ class CowLoggerDetailsController extends GetxController {
     try {
       this.log = log;
       if (log?.id != null) {
-        isEdit?.value = true;
         name = TextEditingController(text: log?.name);
         description = TextEditingController(text: log?.description.toString());
         if (log?.image?.url != null) {
           remoteImagePath?.value = log!.image!.url!;
           selectedImagePath?.value = "";
         }
+        isEdit?.value = true;
       } else {
         name = TextEditingController(text: 'test name');
         description = TextEditingController(text: 'test desc');
@@ -110,43 +110,28 @@ class CowLoggerDetailsController extends GetxController {
       dynamic res;
       if (uploadFile == null) {
         Get.snackbar('Error', 'Add an image, please.');
-        // res = await apiService.saveNewLog(
-        //   name: name.text,
-        //   description: description.text,
-        //   postTime: postTime,
-        //   imageId: null,
-        // );
-        // snackMessageNavigate(res);
+        res = await apiService.saveNewLog(
+          name: name.text,
+          description: description.text,
+          postTime: postTime,
+          imageId: null,
+        );
+        snackMessageNavigate(res);
       } else if (uploadFile!.value!.path.isNotEmpty) {
         var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
-        // ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
-        //   uploadRes.data[0],
-        // );
-        // res = await apiService.saveNewLog(
-        //   name: name.text,
-        //   description: description.text,
-        //   postTime: postTime,
-        //   imageId: updateImageId.id.toString(),
-        // );
-        // snackMessageNavigate(res);
-
-        // DateTime postTime = selectedDate.value;
-        // if (uploadFile!.value!.path.isNotEmpty) {
-        //   var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
-        //   ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
-        //     uploadRes.data[0],
-        //   );
-        //   dynamic res = await apiService.saveNewLog(
-        //     name: name.text,
-        //     description: description.text,
-        //     postTime: postTime,
-        //     imageId: updateImageId.id.toString(),
-        //   );
-        //   snackMessageNavigate(res);
-      } 
-      // else {
-      //   Get.snackbar('Error', 'Add an image, please.');
-      // }
+        ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
+          uploadRes.data[0],
+        );
+        res = await apiService.saveNewLog(
+          name: name.text,
+          description: description.text,
+          postTime: postTime,
+          imageId: updateImageId.id.toString(),
+        );
+        snackMessageNavigate(res);
+      } else {
+        Get.snackbar('Error', 'Add an image, please.');
+      }
     } catch (e) {
       EasyLoading.showError(e.toString());
     } finally {

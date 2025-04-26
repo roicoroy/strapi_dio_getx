@@ -48,16 +48,25 @@ class CowLoggerApiService {
     required DateTime postTime,
     String? imageId,
   }) async {
-    print(documentId);
-    var postData = {
-      "data": {
-        "name": name,
-        "description": description,
-        "image": imageId,
-        "date": postTime.toString(),
-      },
-    };
-
+    var postData;
+    if (imageId == null) {
+      postData = {
+        "data": {
+          "name": name,
+          "description": description,
+          "date": postTime.toString(),
+        },
+      };
+    } else {
+      postData = {
+        "data": {
+          "name": name,
+          "description": description,
+          "image": imageId,
+          "date": postTime.toString(),
+        },
+      };
+    }
     Response response = await dio.put(
       "$baseUrl/api/$cowLoggerEndpoint/$documentId",
       data: postData,
