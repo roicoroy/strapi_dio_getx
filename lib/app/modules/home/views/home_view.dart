@@ -19,7 +19,11 @@ class HomeView extends GetView<HomeController> {
           IconButton(
             icon: const Icon(Icons.code),
             onPressed: () {
-              Get.toNamed(Routes.COW_LOGGER);
+              // Get.toNamed(Routes.COW_LOGGER);
+               Get.toNamed(
+                      Routes.COW_LOGGER,
+                      arguments: {'loadLogs': true},
+                    );
             },
           ),
           IconButton(

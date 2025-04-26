@@ -49,9 +49,9 @@ class Datum {
     });
 
     final int? id;
-    final String? documentId;
-    final String? name;
-    final String? description;
+    final dynamic? documentId;
+    final dynamic? name;
+    final dynamic? description;
     final DateTime? date;
     final DateTime? createdAt;
     final DateTime? updatedAt;

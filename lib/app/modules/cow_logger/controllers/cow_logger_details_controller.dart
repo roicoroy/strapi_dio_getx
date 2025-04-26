@@ -9,15 +9,17 @@ import '../../../model/image_upload_response.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/cow_looger_api.dart';
 import '../../../services/network/upload.dart';
+import 'cow_logger_controller.dart';
 
 class CowLoggerDetailsController extends GetxController {
   final CowLoggerApiService apiService = CowLoggerApiService();
+  final CowLoggerController cowLoggerController = CowLoggerController();
 
   Rx<DateTime> selectedDate = DateTime.now().obs;
   Rx<TimeOfDay> selectedTime = TimeOfDay.now().obs;
 
   final UploadService uploadApi = UploadService();
-  late Rxn<XFile> uploadFile;
+  late Rxn<XFile>? uploadFile = null;
   RxString? selectedImagePath = "".obs;
   RxString? remoteImagePath = "".obs;
   RxString? selectedImageSize = "".obs;
@@ -27,11 +29,7 @@ class CowLoggerDetailsController extends GetxController {
   TextEditingController description = TextEditingController();
   TextEditingController date = TextEditingController();
   Datum? log;
-
-  @override
-  void onReady() async {
-    super.onReady();
-  }
+  //
 
   @override
   void onClose() {
@@ -47,8 +45,9 @@ class CowLoggerDetailsController extends GetxController {
     try {
       this.log = log;
       if (log?.id != null) {
+        isEdit?.value = true;
         name = TextEditingController(text: log?.name);
-        description = TextEditingController(text: log?.description);
+        description = TextEditingController(text: log?.description.toString());
         if (log?.image?.url != null) {
           remoteImagePath?.value = log!.image!.url!;
           selectedImagePath?.value = "";
@@ -58,6 +57,8 @@ class CowLoggerDetailsController extends GetxController {
         description = TextEditingController(text: 'test desc');
         remoteImagePath?.value = "";
         selectedImagePath?.value = "";
+        uploadFile!.value = null;
+        isEdit?.value = false;
       }
     } catch (e) {
       EasyLoading.showError(e.toString());
@@ -67,49 +68,34 @@ class CowLoggerDetailsController extends GetxController {
   }
 
   Future<dynamic> updateLog() async {
-    DateTime postTime = selectedDate.value;
-    if (uploadFile.value!.name.isNotEmpty) {}
-    var postData = {
-      name: name.text,
-      description: description.text,
-      postTime: postTime,
-      // imageId: updateImageId.id.toString(),
-    };
-    var res = await apiService.updateLog(
-      documentId: log!.documentId.toString(),
-      name: name.text,
-      description: description.text,
-      postTime: postTime,
-    );
-    if (res.statusCode == 200) {
-      Get.snackbar('Success', 'Log Updated Successfully');
-    } else {
-      Get.snackbar('Error', 'Failed to update log');
-    }
-    return res;
-  }
-
-  void saveNewLog() async {
-    EasyLoading.show(status: 'Loading...', dismissOnTap: false);
+    EasyLoading.show(status: 'Loading...', dismissOnTap: true);
     try {
       DateTime postTime = selectedDate.value;
-      if (uploadFile.value!.path.isNotEmpty) {
-        var uploadRes = await uploadApi.uploadMediaFile(uploadFile);
+      dynamic res;
+      if (uploadFile == null) {
+        res = await apiService.updateLog(
+          documentId: log!.documentId.toString(),
+          name: name.text,
+          description: description.text,
+          postTime: postTime,
+          imageId: null,
+        );
+        await cowLoggerController.getLogsNoLoading();
+        snackMessageNavigate(res);
+      } else if (uploadFile!.value!.path.isNotEmpty) {
+        var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
         ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
           uploadRes.data[0],
         );
-        var res = await apiService.saveNewLog(
+        res = await apiService.updateLog(
+          documentId: log!.documentId.toString(),
           name: name.text,
           description: description.text,
           postTime: postTime,
           imageId: updateImageId.id.toString(),
         );
-        res.statusCode == 200
-            ? Get.snackbar('Success', 'Log Created Successfully')
-            : Get.snackbar('Error', 'Failed to create log');
+        snackMessageNavigate(res);
       }
-
-      Get.toNamed(Routes.COW_LOGGER);
     } catch (e) {
       EasyLoading.showError(e.toString());
     } finally {
@@ -117,8 +103,72 @@ class CowLoggerDetailsController extends GetxController {
     }
   }
 
-  validationCowDetailsView() {
+  void saveNewLog() async {
+    EasyLoading.show(status: 'Loading...', dismissOnTap: true);
+    try {
+      DateTime postTime = selectedDate.value;
+      dynamic res;
+      if (uploadFile == null) {
+        Get.snackbar('Error', 'Add an image, please.');
+        // res = await apiService.saveNewLog(
+        //   name: name.text,
+        //   description: description.text,
+        //   postTime: postTime,
+        //   imageId: null,
+        // );
+        // snackMessageNavigate(res);
+      } else if (uploadFile!.value!.path.isNotEmpty) {
+        var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
+        // ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
+        //   uploadRes.data[0],
+        // );
+        // res = await apiService.saveNewLog(
+        //   name: name.text,
+        //   description: description.text,
+        //   postTime: postTime,
+        //   imageId: updateImageId.id.toString(),
+        // );
+        // snackMessageNavigate(res);
 
+        // DateTime postTime = selectedDate.value;
+        // if (uploadFile!.value!.path.isNotEmpty) {
+        //   var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
+        //   ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
+        //     uploadRes.data[0],
+        //   );
+        //   dynamic res = await apiService.saveNewLog(
+        //     name: name.text,
+        //     description: description.text,
+        //     postTime: postTime,
+        //     imageId: updateImageId.id.toString(),
+        //   );
+        //   snackMessageNavigate(res);
+      } 
+      // else {
+      //   Get.snackbar('Error', 'Add an image, please.');
+      // }
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
+
+  snackMessageNavigate(dynamic res) async {
+    res.statusCode == 200
+        ? {
+          Get.toNamed(Routes.COW_LOGGER, arguments: {'loadLogs': false}),
+          Get.snackbar(
+            'Success',
+            'Log Created Successfully',
+            snackPosition: SnackPosition.BOTTOM,
+          ),
+        }
+        : Get.snackbar(
+          'Error',
+          'Failed to create log',
+          snackPosition: SnackPosition.BOTTOM,
+        );
   }
 
   void getImage(ImageSource imageSource) async {

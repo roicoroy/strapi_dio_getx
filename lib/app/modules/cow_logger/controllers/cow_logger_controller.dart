@@ -7,10 +7,18 @@ class CowLoggerController extends GetxController {
   RxList<Datum> list = List<Datum>.empty(growable: true).obs;
   final CowLoggerApiService apiService = CowLoggerApiService();
 
-  @override
-  void onReady() async {
-    super.onReady();
-    await getLogs();
+  loadLogs(bool loadLogs) {
+    loadLogs ? getLogs() : getLogs();
+  }
+
+  Future<void> getLogsNoLoading() async {
+    try {
+      List<Datum> response = await apiService.getCowLoggers();
+      list.assignAll(response);
+      update();
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 
   Future<void> getLogs() async {
@@ -18,8 +26,10 @@ class CowLoggerController extends GetxController {
     try {
       List<Datum> response = await apiService.getCowLoggers();
       list.assignAll(response);
+      update();
     } catch (e) {
-      EasyLoading.showError('Something wrong on getLogs. Try again!');
+      EasyLoading.showError(e.toString());
+      throw Exception(e);
     } finally {
       EasyLoading.dismiss();
     }

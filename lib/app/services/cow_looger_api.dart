@@ -53,7 +53,7 @@ class CowLoggerApiService {
       "data": {
         "name": name,
         "description": description,
-        // "image": imageId,
+        "image": imageId,
         "date": postTime.toString(),
       },
     };
