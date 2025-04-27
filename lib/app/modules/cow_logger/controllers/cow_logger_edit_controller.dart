@@ -14,7 +14,7 @@ import '../../../services/network/upload.dart';
 import 'cow_logger_controller.dart';
 
 //
-class CowLoggerAddController extends GetxController {
+class CowLoggerEditController extends GetxController {
   final CowLoggerApiService apiService = CowLoggerApiService();
   final CowLoggerController cowLoggerController = CowLoggerController();
 
@@ -46,26 +46,23 @@ class CowLoggerAddController extends GetxController {
   setUpLog(Datum? log) {
     EasyLoading.show(status: 'Loading...', dismissOnTap: false);
     try {
-      name = TextEditingController(text: 'test name');
-      description = TextEditingController(text: 'test desc');
-      remoteImagePath?.value = "";
-      selectedImagePath?.value = "";
-      // this.log = log;
-      // if (log?.id != null) {
-      //   name = TextEditingController(text: log?.name);
-      //   description = TextEditingController(text: log?.description.toString());
-      //   if (log?.image?.url != null) {
-
-      //   }
-      //   isEdit?.value = true;
-      // } else {
-      //   name = TextEditingController(text: 'test name');
-      //   description = TextEditingController(text: 'test desc');
-      //   remoteImagePath?.value = "";
-      //   selectedImagePath?.value = "";
-      //   uploadFile!.value = null;
-      //   isEdit?.value = false;
-      // }
+      this.log = log;
+      if (log?.id != null) {
+        name = TextEditingController(text: log?.name);
+        description = TextEditingController(text: log?.description.toString());
+        if (log?.image?.url != null) {
+          remoteImagePath?.value = log!.image!.url!;
+          selectedImagePath?.value = "";
+        }
+        isEdit?.value = true;
+      } else {
+        name = TextEditingController(text: 'test name');
+        description = TextEditingController(text: 'test desc');
+        remoteImagePath?.value = "";
+        selectedImagePath?.value = "";
+        uploadFile!.value = null;
+        isEdit?.value = false;
+      }
     } catch (e) {
       EasyLoading.showError(e.toString());
     } finally {
@@ -73,41 +70,41 @@ class CowLoggerAddController extends GetxController {
     }
   }
 
-  // Future<dynamic> updateLog() async {
-  //   EasyLoading.show(status: 'Loading...', dismissOnTap: true);
-  //   try {
-  //     DateTime postTime = selectedDate.value;
-  //     dynamic res;
-  //     if (uploadFile == null) {
-  //       res = await apiService.updateLog(
-  //         documentId: log!.documentId.toString(),
-  //         name: name.text,
-  //         description: description.text,
-  //         postTime: postTime,
-  //         imageId: null,
-  //       );
-  //       await cowLoggerController.getLogsNoLoading();
-  //       snackMessageNavigate(res);
-  //     } else if (uploadFile!.value!.path.isNotEmpty) {
-  //       var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
-  //       ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
-  //         uploadRes.data[0],
-  //       );
-  //       res = await apiService.updateLog(
-  //         documentId: log!.documentId.toString(),
-  //         name: name.text,
-  //         description: description.text,
-  //         postTime: postTime,
-  //         imageId: updateImageId.id.toString(),
-  //       );
-  //       snackMessageNavigate(res);
-  //     }
-  //   } catch (e) {
-  //     EasyLoading.showError(e.toString());
-  //   } finally {
-  //     EasyLoading.dismiss();
-  //   }
-  // }
+  Future<dynamic> updateLog() async {
+    EasyLoading.show(status: 'Loading...', dismissOnTap: true);
+    try {
+      DateTime postTime = selectedDate.value;
+      dynamic res;
+      if (uploadFile == null) {
+        res = await apiService.updateLog(
+          documentId: log!.documentId.toString(),
+          name: name.text,
+          description: description.text,
+          postTime: postTime,
+          imageId: null,
+        );
+        await cowLoggerController.getLogsNoLoading();
+        snackMessageNavigate(res);
+      } else if (uploadFile!.value!.path.isNotEmpty) {
+        var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
+        ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
+          uploadRes.data[0],
+        );
+        res = await apiService.updateLog(
+          documentId: log!.documentId.toString(),
+          name: name.text,
+          description: description.text,
+          postTime: postTime,
+          imageId: updateImageId.id.toString(),
+        );
+        snackMessageNavigate(res);
+      }
+    } catch (e) {
+      EasyLoading.showError(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    }
+  }
 
   void saveNewLog() async {
     EasyLoading.show(status: 'Loading...', dismissOnTap: true);
@@ -116,28 +113,25 @@ class CowLoggerAddController extends GetxController {
       dynamic res;
       if (uploadFile == null) {
         Get.snackbar('Error', 'Add an image, please.');
-        // res = await apiService.saveNewLog(
-        //   name: name.text,
-        //   description: description.text,
-        //   postTime: postTime,
-        //   imageId: null,
-        // );
-        // snackMessageNavigate(res);
+        res = await apiService.saveNewLog(
+          name: name.text,
+          description: description.text,
+          postTime: postTime,
+          imageId: null,
+        );
+        snackMessageNavigate(res);
       } else if (uploadFile!.value!.path.isNotEmpty) {
         var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
         ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
           uploadRes.data[0],
         );
-        // ignore: unnecessary_null_comparison
-        if (updateImageId != null) {
-          res = await apiService.saveNewLog(
-            name: name.text,
-            description: description.text,
-            postTime: postTime,
-            imageId: updateImageId.id.toString(),
-          );
-          snackMessageNavigate(res);
-        }
+        res = await apiService.saveNewLog(
+          name: name.text,
+          description: description.text,
+          postTime: postTime,
+          imageId: updateImageId.id.toString(),
+        );
+        snackMessageNavigate(res);
       } else {
         Get.snackbar('Error', 'Add an image, please.');
       }
@@ -149,7 +143,7 @@ class CowLoggerAddController extends GetxController {
   }
 
   snackMessageNavigate(dynamic res) async {
-    res.statusCode == 201
+    res.statusCode == 200
         ? {
           Get.toNamed(Routes.COW_LOGGER, arguments: {'loadLogs': false}),
           Get.snackbar(

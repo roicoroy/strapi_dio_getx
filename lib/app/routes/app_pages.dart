@@ -5,8 +5,12 @@ import '../modules/auth/bindings/login_binding.dart';
 import '../modules/auth/bindings/register_binding.dart';
 import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/register_view.dart';
+import '../modules/cow_logger/bindings/cow_logger_add_binding.dart';
 import '../modules/cow_logger/bindings/cow_logger_details_binding.dart';
+import '../modules/cow_logger/bindings/cow_logger_edit_binding.dart';
 import '../modules/cow_logger/bindings/cow_logger_list_binding.dart';
+import '../modules/cow_logger/views/cow_logger_add.dart';
+import '../modules/cow_logger/views/cow_logger_edit.dart';
 import '../modules/cow_logger/views/cow_logger_list.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
@@ -53,6 +57,16 @@ class AppPages {
       name: _Paths.COW_LOGGER_DETAILS,
       page: () => CowLoggerDetailsView(),
       binding: CowLoggerDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.COW_LOGGER_EDIT,
+      page: () => CowLoggerEdit(),
+      binding: CowLoggerEditBinding(),
+    ),
+    GetPage(
+      name: _Paths.COW_LOGGER_ADD,
+      page: () => CowLoggerAdd(),
+      binding: CowLoggerAddBinding(),
     ),
   ];
 }

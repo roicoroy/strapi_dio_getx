@@ -35,7 +35,7 @@ class CowLoggerList extends GetView<CowLoggerController> {
                   subtitle: date!.toIso8601String(),
                   onPressed: () {
                     Get.toNamed(
-                      Routes.COW_LOGGER_DETAILS,
+                      Routes.COW_LOGGER_EDIT,
                       arguments: {'log': controller.list.value[index]},
                     );
                   },
@@ -46,10 +46,7 @@ class CowLoggerList extends GetView<CowLoggerController> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:
-            () => {
-              controller.createNewLog(),
-            },
+        onPressed: () => {controller.createNewLog()},
         tooltip: 'Add new log',
         child: Icon(Icons.add),
       ),
@@ -140,4 +137,3 @@ class CardFb1 extends StatelessWidget {
     );
   }
 }
-

@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+ import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:strapi_dio_getx/app/model/cow_logger.dart';
 import 'package:strapi_dio_getx/main.dart';

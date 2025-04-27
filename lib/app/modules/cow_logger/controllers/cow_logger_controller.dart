@@ -13,8 +13,7 @@ class CowLoggerController extends GetxController {
   }
 
   createNewLog() {
-    print('object');
-    Get.toNamed(Routes.COW_LOGGER_DETAILS, arguments: {'log': null});
+    Get.toNamed(Routes.COW_LOGGER_ADD, arguments: {'log': null});
   }
 
   Future<void> getLogsNoLoading() async {
