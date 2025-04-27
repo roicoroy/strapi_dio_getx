@@ -7,7 +7,7 @@ import '../modules/auth/views/login_view.dart';
 import '../modules/auth/views/register_view.dart';
 import '../modules/cow_logger/bindings/cow_logger_details_binding.dart';
 import '../modules/cow_logger/bindings/cow_logger_list_binding.dart';
-import '../modules/cow_logger/views/cow_logger_list_view.dart';
+import '../modules/cow_logger/views/cow_logger_list.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -46,7 +46,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.COW_LOGGER,
-      page: () => CowLoggerListView(),
+      page: () => CowLoggerList(),
       binding: CowLoggerListBinding(),
     ),
     GetPage(

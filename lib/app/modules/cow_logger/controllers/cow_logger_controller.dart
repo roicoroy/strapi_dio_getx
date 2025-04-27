@@ -1,6 +1,7 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import '../../../model/cow_logger.dart';
+import '../../../routes/app_pages.dart';
 import '../../../services/cow_looger_api.dart';
 
 class CowLoggerController extends GetxController {
@@ -9,6 +10,11 @@ class CowLoggerController extends GetxController {
 
   loadLogs(bool loadLogs) {
     loadLogs ? getLogs() : getLogs();
+  }
+
+  createNewLog() {
+    print('object');
+    Get.toNamed(Routes.COW_LOGGER_DETAILS, arguments: {'log': null});
   }
 
   Future<void> getLogsNoLoading() async {
