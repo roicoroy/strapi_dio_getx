@@ -34,11 +34,7 @@ class RegisterController extends GetxController {
         User loggeedUser = User.fromJson(result.data);
         // user.value = loggeedUser;
         await storageService.addToken(token);
-        if (loggeedUser != null) {
-          await storageService.addUser(loggeedUser!);
-        } else {
-          throw Exception('User data is null');
-        }
+        await storageService.addUser(loggeedUser);
         Get.toNamed(Routes.HOME);
       }
     } catch (e) {

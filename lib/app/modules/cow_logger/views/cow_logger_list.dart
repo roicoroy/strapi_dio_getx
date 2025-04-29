@@ -88,51 +88,98 @@ class CardFb1 extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          children: [
-            const SizedBox(height: 5),
-            InkWell(
-              onTap: onPressed,
-              child: CircleAvatar(
-                backgroundColor: Colors.amber,
-                child:
-                    imageUrl == null
-                        ? Center(
-                          child: CircularProgressIndicator(color: Colors.green),
-                        )
-                        : CircleAvatar(
-                          backgroundColor: Colors.amber,
-                          child: Image.network(
-                            imageUrl!,
-                            height: 59,
-                            fit: BoxFit.cover,
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+              InkWell(
+                onTap: onPressed,
+                child: CircleAvatar(
+                  backgroundColor: Colors.amber,
+                  child:
+                      imageUrl == null
+                          ? Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.green,
+                            ),
+                          )
+                          : CircleAvatar(
+                            backgroundColor: Colors.amber,
+                            child: Image.network(
+                              imageUrl!,
+                              height: 59,
+                              fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
+                ),
               ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+              const SizedBox(height: 30),
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.normal,
-                fontSize: 12,
+              const SizedBox(height: 30),
+              Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 12,
+                ),
               ),
-            ),
-            const SizedBox(height: 5),
-          ],
+              const SizedBox(height: 30),
+              RoundedBadge(
+                title: "Get Started",
+                icon: Icon(
+                  Icons.flash_on,
+                  color: Colors.white.withOpacity(.75),
+                  size: 12,
+                ),
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class RoundedBadge extends StatelessWidget {
+  final String title;
+  final Widget icon;
+  const RoundedBadge({required this.title, required this.icon, Key? key})
+    : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(.25),
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          const SizedBox(width: 5),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+        ],
       ),
     );
   }
