@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:strapi_dio_getx/app/services/local_get_storage.dart';
+import 'package:strapi_dio_getx/app/services/local/local_get_storage.dart';
 
-import '../../../services/is_loggedIn_service.dart';
+import '../../../services/local/is_loggedIn_service.dart';
 import '../../../routes/app_pages.dart';
 
 class RootController extends GetxController {

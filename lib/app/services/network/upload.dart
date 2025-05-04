@@ -5,7 +5,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:strapi_dio_getx/main.dart';
 
-import '../../../const.dart';
+import '../../../constants/const.dart';
 import 'package:http_parser/http_parser.dart';
 
 class UploadService {

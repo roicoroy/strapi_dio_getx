@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:get/get.dart';
+import 'package:strapi_dio_getx/app/modules/cow_logger/components/logger_card.dart';
+import 'package:strapi_dio_getx/app/modules/cow_logger/components/logger_list_card.dart';
 
+import '../../../../constants/app_assets.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../model/door_hub/services_model.dart';
 import '../../../routes/app_pages.dart';
+import '../../widgets/buttons/custom_icon_button.dart';
+import '../../widgets/containers/primary_container.dart';
+import '../components/logger_grid_card.dart';
 import '../controllers/cow_logger_controller.dart';
 
 class CowLoggerList extends GetView<CowLoggerController> {
   CowLoggerList({super.key});
 
-  bool loadLogs = Get.arguments['loadLogs'];
+  bool isGridView = false;
 
   @override
   Widget build(BuildContext context) {
-    controller.loadLogs(loadLogs);
+    controller.getLogs();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('CowLoggerListView'),
@@ -20,166 +31,88 @@ class CowLoggerList extends GetView<CowLoggerController> {
         automaticallyImplyLeading: false,
         leading: BackButton(onPressed: () => Get.toNamed(Routes.HOME)),
       ),
+      // body: Text('data'),
       body: Obx(
-        () => Center(
-          child: ListView.builder(
-            itemCount: controller.list.value.length,
-            itemBuilder: (context, index) {
-              final String? userName = controller.list.value[index].name;
-              final DateTime? date = controller.list.value[index].date;
-              return Padding(
-                padding: EdgeInsets.all(10.0),
-                child: CardFb1(
-                  text: userName ?? "blank",
-                  imageUrl: controller.list.value[index].image?.url,
-                  subtitle: date!.toIso8601String(),
-                  onPressed: () {
-                    Get.toNamed(
-                      Routes.COW_LOGGER_EDIT,
-                      arguments: {'log': controller.list.value[index]},
+        () => Column(
+          children: [
+            // SizedBox(height: 50.h),
+            SizedBox(height: 20.h),
+            PrimaryContainer(
+              child: AnimatedCrossFade(
+                firstChild: ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    // return LoggerListCard(
+                    //   service: allServices[index],
+                    //   log: controller.list.value[index],
+                    // );
+                    return Slidable(
+                      endActionPane: ActionPane(
+                        extentRatio: 0.5,
+                        motion: const ScrollMotion(),
+                        children: [
+                          SizedBox(width: 5.w),
+                          CustomIconButton(
+                            icon: AppAssets.kDelete,
+                            onTap: () {},
+                          ),
+                        ],
+                      ),
+                      child: LoggerListCard(
+                        service: allServices[index],
+                        log: controller.list.value[index],
+                      ),
+                      // child: const LoggerCard(
+                      //   isHistoryView: true,
+                      //   color: AppColors.kAccent7,
+                      // ),
                     );
                   },
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemCount: controller.list.value.length,
                 ),
-              );
-            },
-          ),
+                // firstChild: ListView.separated(
+                //   shrinkWrap: true,
+                //   physics: const NeverScrollableScrollPhysics(),
+                //   itemBuilder: (context, index) {
+                // return LoggerListCard(
+                //   service: allServices[index],
+                //   log: controller.list.value[index],
+                // );
+                //   },
+                //   separatorBuilder: (context, index) => const Divider(),
+                //   itemCount: controller.list.value.length,
+                // ),
+                secondChild: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 148.w / 237.h,
+                    mainAxisSpacing: 10.w,
+                    crossAxisSpacing: 10.w,
+                  ),
+                  itemCount: controller.list.value.length,
+                  itemBuilder: (context, index) {
+                    return LoggerGridCard(service: allServices[index]);
+                  },
+                ),
+                crossFadeState:
+                    isGridView
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                duration: const Duration(milliseconds: 500),
+              ),
+            ),
+            SizedBox(height: 20.h),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {controller.createNewLog()},
         tooltip: 'Add new log',
         child: Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class CardFb1 extends StatelessWidget {
-  final String text;
-  final String? imageUrl;
-  final String subtitle;
-  final Function() onPressed;
-
-  const CardFb1({
-    required this.text,
-    this.imageUrl,
-    required this.subtitle,
-    required this.onPressed,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: 150,
-        height: 150,
-        padding: const EdgeInsets.all(15.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.5),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(10, 20),
-              blurRadius: 10,
-              spreadRadius: 0,
-              color: Colors.grey.withOpacity(.05),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 30),
-              InkWell(
-                onTap: onPressed,
-                child: CircleAvatar(
-                  backgroundColor: Colors.amber,
-                  child:
-                      imageUrl == null
-                          ? Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.green,
-                            ),
-                          )
-                          : CircleAvatar(
-                            backgroundColor: Colors.amber,
-                            child: Image.network(
-                              imageUrl!,
-                              height: 59,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Text(
-                text,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 30),
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.normal,
-                  fontSize: 12,
-                ),
-              ),
-              const SizedBox(height: 30),
-              RoundedBadge(
-                title: "Get Started",
-                icon: Icon(
-                  Icons.flash_on,
-                  color: Colors.white.withOpacity(.75),
-                  size: 12,
-                ),
-              ),
-              const SizedBox(height: 30),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class RoundedBadge extends StatelessWidget {
-  final String title;
-  final Widget icon;
-  const RoundedBadge({required this.title, required this.icon, Key? key})
-    : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(.25),
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          icon,
-          const SizedBox(width: 5),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 14,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-        ],
       ),
     );
   }

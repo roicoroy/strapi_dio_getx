@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:strapi_dio_getx/app/model/cow_logger.dart';
 
 import '../../../model/cow_logger.dart' as cow_logger;
 import '../../../routes/app_pages.dart';
@@ -10,7 +11,9 @@ import '../controllers/cow_logger_details_controller.dart';
 
 // ignore: must_be_immutable
 class CowLoggerDetailsView extends GetView<CowLoggerDetailsController> {
-  CowLoggerDetailsView({super.key});
+  // final Datum? log;
+  
+  CowLoggerDetailsView({super.key, required log});
 
   cow_logger.Datum? log = Get.arguments['log'];
 
@@ -91,7 +94,7 @@ class SocialPictureGroup extends StatelessWidget {
                     color: Colors.red,
                   ),
                   clipBehavior: Clip.antiAlias,
-                  child: Image.network(imgUrl, fit: BoxFit.fitWidth),
+                  // child: Image.network(imgUrl, fit: BoxFit.fitWidth),
                 ),
               ),
               SizedBox(height: 10),

@@ -1,9 +1,9 @@
- import 'package:dio/dio.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:strapi_dio_getx/app/model/cow_logger.dart';
 import 'package:strapi_dio_getx/main.dart';
 
-import '../../const.dart';
+import '../../constants/const.dart';
 
 class CowLoggerApiService {
   var cowUrl = '$baseUrl/api/$cowLoggerEndpoint/?populate=*';
@@ -20,6 +20,11 @@ class CowLoggerApiService {
       debugPrint(e.toString());
       throw Exception(e);
     }
+  }
+
+  Future<Response> deleteLog({required String id}) async {
+    Response response = await dio.delete('$baseUrl/api/$cowLoggerEndpoint/$id');
+    return response;
   }
 
   Future<Response> saveNewLog({

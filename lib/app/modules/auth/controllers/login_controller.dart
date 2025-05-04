@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../model/autheinciated_user.dart';
 import '../../../services/network/api.dart';
-import '../../../services/local_get_storage.dart';
+import '../../../services/local/local_get_storage.dart';
 import '../../../model/user.dart';
 import '../../../routes/app_pages.dart';
 

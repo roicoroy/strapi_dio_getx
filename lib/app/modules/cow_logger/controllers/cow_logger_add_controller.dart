@@ -50,64 +50,12 @@ class CowLoggerAddController extends GetxController {
       description = TextEditingController(text: 'test desc');
       remoteImagePath?.value = "";
       selectedImagePath?.value = "";
-      // this.log = log;
-      // if (log?.id != null) {
-      //   name = TextEditingController(text: log?.name);
-      //   description = TextEditingController(text: log?.description.toString());
-      //   if (log?.image?.url != null) {
-
-      //   }
-      //   isEdit?.value = true;
-      // } else {
-      //   name = TextEditingController(text: 'test name');
-      //   description = TextEditingController(text: 'test desc');
-      //   remoteImagePath?.value = "";
-      //   selectedImagePath?.value = "";
-      //   uploadFile!.value = null;
-      //   isEdit?.value = false;
-      // }
     } catch (e) {
       EasyLoading.showError(e.toString());
     } finally {
       EasyLoading.dismiss();
     }
   }
-
-  // Future<dynamic> updateLog() async {
-  //   EasyLoading.show(status: 'Loading...', dismissOnTap: true);
-  //   try {
-  //     DateTime postTime = selectedDate.value;
-  //     dynamic res;
-  //     if (uploadFile == null) {
-  //       res = await apiService.updateLog(
-  //         documentId: log!.documentId.toString(),
-  //         name: name.text,
-  //         description: description.text,
-  //         postTime: postTime,
-  //         imageId: null,
-  //       );
-  //       await cowLoggerController.getLogsNoLoading();
-  //       snackMessageNavigate(res);
-  //     } else if (uploadFile!.value!.path.isNotEmpty) {
-  //       var uploadRes = await uploadApi.uploadMediaFile(uploadFile!);
-  //       ImageUploadResponse updateImageId = ImageUploadResponse.fromJson(
-  //         uploadRes.data[0],
-  //       );
-  //       res = await apiService.updateLog(
-  //         documentId: log!.documentId.toString(),
-  //         name: name.text,
-  //         description: description.text,
-  //         postTime: postTime,
-  //         imageId: updateImageId.id.toString(),
-  //       );
-  //       snackMessageNavigate(res);
-  //     }
-  //   } catch (e) {
-  //     EasyLoading.showError(e.toString());
-  //   } finally {
-  //     EasyLoading.dismiss();
-  //   }
-  // }
 
   void saveNewLog() async {
     EasyLoading.show(status: 'Loading...', dismissOnTap: true);

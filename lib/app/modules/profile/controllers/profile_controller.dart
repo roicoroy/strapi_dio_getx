@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../model/image_upload_response.dart';
 import '../../../model/user.dart';
 import '../../../services/network/api.dart';
-import '../../../services/local_get_storage.dart';
+import '../../../services/local/local_get_storage.dart';
 import '../../../services/network/upload.dart';
 
 class ProfileController extends GetxController {

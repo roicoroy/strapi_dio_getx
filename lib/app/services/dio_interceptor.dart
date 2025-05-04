@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../../const.dart';
-import 'get_token_service.dart';
+import '../../constants/const.dart';
+import 'local/get_token_service.dart';
 
 class DioInterceptor extends Interceptor {
   Dio dio = Dio(BaseOptions(baseUrl: strapiBaseUrl));

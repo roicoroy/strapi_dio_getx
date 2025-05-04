@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../model/user.dart';
 import '../../../routes/app_pages.dart';
 import '../../../services/network/api.dart';
-import '../../../services/local_get_storage.dart';
+import '../../../services/local/local_get_storage.dart';
 
 class RegisterController extends GetxController {
   final LocalGetStorageService storageService = LocalGetStorageService();

@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
 import 'package:strapi_dio_getx/main.dart';
 
-import '../../../const.dart';
+import '../../../constants/const.dart';
 import '../../model/user.dart' show User;
 
 class ApiService {

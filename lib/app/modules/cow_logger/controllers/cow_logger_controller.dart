@@ -8,12 +8,19 @@ class CowLoggerController extends GetxController {
   RxList<Datum> list = List<Datum>.empty(growable: true).obs;
   final CowLoggerApiService apiService = CowLoggerApiService();
 
-  loadLogs(bool loadLogs) {
-    loadLogs ? getLogs() : getLogs();
+  loadLogs(bool? loadLogs) {
+    // loadLogs? ? getLogsNoLoading() : getLogs();
+    getLogs();
   }
 
   createNewLog() {
     Get.toNamed(Routes.COW_LOGGER_ADD, arguments: {'log': null});
+  }
+
+  @override
+  void onInit() async {
+    super.onInit();
+    await getLogs();
   }
 
   Future<void> getLogsNoLoading() async {
@@ -37,6 +44,16 @@ class CowLoggerController extends GetxController {
       throw Exception(e);
     } finally {
       EasyLoading.dismiss();
+    }
+  }
+
+  Future<void> deleteLog(String id) async {
+    try {
+      apiService.deleteLog(id: id).then((response) async {
+        await getLogs();
+      });
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

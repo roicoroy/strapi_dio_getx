@@ -1,6 +1,7 @@
 analyzer:
   errors:
     invalid_use_of_protected_member: ignore
+    must_be_immutable: ignore ignore
 include: package:flutter_lints/flutter.yaml
 linter:
   rules:

@@ -28,11 +28,7 @@ class AppPages {
 
   static final routes = [
     GetPage(name: _Paths.ROOT, page: () => RootView(), binding: RootBinding()),
-    GetPage(
-      name: _Paths.HOME,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
-    ),
+    GetPage(name: _Paths.HOME, page: () => HomeView(), binding: HomeBinding()),
     GetPage(
       name: _Paths.LOGIN,
       page: () => LoginView(),
@@ -55,7 +51,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.COW_LOGGER_DETAILS,
-      page: () => CowLoggerDetailsView(),
+      page: () => CowLoggerDetailsView(log:null),
       binding: CowLoggerDetailsBinding(),
     ),
     GetPage(
