@@ -1,17 +1,20 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' as cup;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../model/cow_logger.dart';
 import '../data/product.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({
-    required this.product,
+    this.product,
     required this.onAddProduct,
     super.key,
+    required this.log,
   });
 
-  final Product product;
+  final Product? product;
+  final Datum log;
 
   // final VoidCallback onAddProduct;
   final Function(Product product) onAddProduct;
@@ -42,25 +45,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           children: [
             SizedBox(
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30.0,
+                  vertical: 10,
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SafeArea(
-                        child: SizedBox(
-                          height: 350,
-                          width: 350,
-                          child: Hero(
-                            tag: "${widget.product.id}$heroTage",
-                            child: Image.asset(widget.product.imageUrl),
+                        child: Center(
+                          child: SizedBox(
+                            height: 150,
+                            width: 150,
+                            child: Hero(
+                              tag: "${widget.log.id}",
+                              child: cup.Image.network(widget.log.image!.url!),
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(height: 30),
                       Text(
-                        widget.product.title,
+                        widget.log.name,
                         style: GoogleFonts.lexendDeca().copyWith(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
@@ -74,66 +81,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           color: Colors.grey,
                         ),
                       ),
-                      const SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 40,
-                            width: 150,
-                            decoration: BoxDecoration(
-                                // color: Colors.grey,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(25),
-                                ),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                )),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    if (widget.product.quantity > 1) {
-                                      setState(() {
-                                        widget.product.quantity--;
-                                      });
-                                    }
-                                  },
-                                  icon: const Icon(Icons.remove),
-                                ),
-                                Text(
-                                  '${widget.product.quantity}',
-                                  style: GoogleFonts.quicksand().copyWith(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      widget.product.quantity++;
-                                    });
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                                // const Icon(Icons.add),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            "\$ ${widget.product.price.toString()}",
-                            style: GoogleFonts.lexendDeca().copyWith(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 30),
                       Text(
-                        "About The Product: ",
+                        "Desciption: ",
                         style: GoogleFonts.quicksand().copyWith(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -142,7 +92,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        widget.product.description,
+                        widget.log.description,
                         style: GoogleFonts.quicksand().copyWith(
                           fontSize: 16,
                           color: Colors.black54,
@@ -153,74 +103,99 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
             ),
-            Container(
-              height: 180,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.topCenter,
-                  colors: [
-                    Colors.white,
-                    Colors.white10,
-                  ],
-                ),
+            // Container(
+            //   height: 180,
+            //   decoration: const BoxDecoration(
+            //     color: Colors.white,
+            //     gradient: LinearGradient(
+            //       begin: Alignment.center,
+            //       end: Alignment.topCenter,
+            //       colors: [Colors.white, Colors.white10],
+            //     ),
+            //   ),
+            //   child: SafeArea(
+            //     child: Padding(
+            //       padding: const EdgeInsets.only(
+            //         left: 30.0,
+            //         right: 30.0,
+            //         top: 50.0,
+            //       ),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           ElevatedButton(
+            //             onPressed: () {},
+            //             style: ElevatedButton.styleFrom(
+            //               backgroundColor: const Color(
+            //                 0xffFEC449,
+            //               ), // Background color
+            //             ),
+            //             child: SizedBox(
+            //               height: 50,
+            //               width: MediaQuery.sizeOf(context).width / 2,
+            //               child: Center(
+            //                 child: Text(
+            //                   "Submit to log",
+            //                   style: GoogleFonts.lexendDeca().copyWith(
+            //                     color: Colors.black,
+            //                     fontSize: 16,
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          ],
+        ),
+        bottomSheet: Container(
+          height: 180,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            gradient: LinearGradient(
+              begin: Alignment.center,
+              end: Alignment.topCenter,
+              colors: [Colors.white, Colors.white10],
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 30.0,
+                right: 30.0,
+                top: 50.0,
               ),
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 30.0,
-                    right: 30.0,
-                    top: 50.0,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Colors.black12,
-                        child: CircleAvatar(
-                          radius: 27,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            CupertinoIcons.heart,
-                            size: 25,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(
+                        0xffFEC449,
+                      ), // Background color
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      width: MediaQuery.sizeOf(context).width / 2,
+                      child: Center(
+                        child: Text(
+                          "Submit to log",
+                          style: GoogleFonts.lexendDeca().copyWith(
+                            color: Colors.black,
+                            fontSize: 16,
                           ),
                         ),
                       ),
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            heroTage = "cart";
-                          });
-                          widget.onAddProduct(widget.product);
-                          Navigator.of(context).pop('Yes');
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color(0xffFEC449) // Background color
-                            ),
-                        child: SizedBox(
-                          height: 50,
-                          width: MediaQuery.sizeOf(context).width / 2,
-                          child: Center(
-                            child: Text(
-                              "Add to cart",
-                              style: GoogleFonts.lexendDeca().copyWith(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

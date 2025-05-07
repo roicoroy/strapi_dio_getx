@@ -17,6 +17,12 @@ class CowLoggerController extends GetxController {
     Get.toNamed(Routes.COW_LOGGER_ADD, arguments: {'log': null});
   }
 
+  getList(RxList<Datum> list) {
+    var returnList = list;
+
+    return returnList.toList();
+  }
+
   @override
   void onInit() async {
     super.onInit();
