@@ -52,7 +52,7 @@ class _LoggerListState extends State<LoggerList> {
                 child: Column(
                   children: [
                     Expanded(
-                      flex: 1,
+                      // flex: 1,
                       child: ClipRRect(
                         borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(60),

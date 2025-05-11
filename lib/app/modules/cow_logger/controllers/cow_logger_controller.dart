@@ -55,9 +55,13 @@ class CowLoggerController extends GetxController {
 
   Future<void> deleteLog(String id) async {
     try {
-      apiService.deleteLog(id: id).then((response) async {
+      var res = await apiService.deleteLog(id: id);
+      if (res.statusCode == 204) {
         await getLogs();
-      });
+      }
+      // apiService.deleteLog(id: id).then((response) {
+      //   getLogs();
+      // });
     } catch (e) {
       throw Exception(e);
     }

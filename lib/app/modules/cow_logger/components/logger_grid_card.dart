@@ -98,8 +98,8 @@ class _LoggerGridCardCardState extends State<LoggerGridCard> {
                       style: AppTypography.kMedium12,
                     ),
                   ),
-                  const Spacer(),
-                  // SecondaryRatingWidget(service: widget.service)
+                  // const Spacer(),
+                  // // SecondaryRatingWidget(service: widget.service)
                 ],
               ),
             ],

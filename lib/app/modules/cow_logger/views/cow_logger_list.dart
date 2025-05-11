@@ -52,8 +52,6 @@ class CowLoggerList extends GetView<CowLoggerController> {
                         CustomIconButton(icon: AppAssets.kDelete, onTap: () {}),
                       ],
                     ),
-
-                    // child: LoggerList(controller.list.value),
                     child: LoggerListCard(
                       service: allServices[index],
                       log: controller.list.value[index],
@@ -74,8 +72,8 @@ class CowLoggerList extends GetView<CowLoggerController> {
                 ),
                 itemCount: controller.list.value.length,
                 itemBuilder: (context, index) {
-                  // return LoggerGridCard(service: allServices[index]);
-                  return LoggerList(crl.list);
+                  return LoggerGridCard(service: allServices[index]);
+                  // return LoggerList(crl.list);
                 },
               ),
               crossFadeState:

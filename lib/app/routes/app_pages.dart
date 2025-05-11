@@ -51,7 +51,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.COW_LOGGER_DETAILS,
-      page: () => CowLoggerDetailsView(log:null),
+      page: () => CowLoggerDetailsView(null),
       binding: CowLoggerDetailsBinding(),
     ),
     GetPage(

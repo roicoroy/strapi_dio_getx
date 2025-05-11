@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mt;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,8 +8,8 @@ import '../../../../constants/app_typography.dart';
 import '../../../model/cow_logger.dart';
 import '../../../model/door_hub/services_model.dart';
 import '../../../routes/app_pages.dart';
-import '../../home/views/product_details_screen.dart';
 import '../controllers/cow_logger_controller.dart';
+import '../views/cow_logger_details_view.dart';
 
 class LoggerListCard extends StatelessWidget {
   final ServicesModel service;
@@ -26,123 +25,275 @@ class LoggerListCard extends StatelessWidget {
 
     final cowLoggerController = Get.put(CowLoggerController());
 
-    return Row(
-      children: [
-        Column(
-          children: [
-            GestureDetector(
-              onTap: () async {
-                final result = await Navigator.of(context).push(
-                  PageRouteBuilder(
-                    transitionDuration: const Duration(milliseconds: 700),
-                    reverseTransitionDuration: const Duration(
-                      milliseconds: 800,
-                    ),
-                    pageBuilder:
-                        (context, animation, secondaryAnimation) =>
-                            FadeTransition(
-                              opacity: animation,
-                              child: ProductDetailScreen(
-                                // product: products[index],
-                                onAddProduct: (product) {},
-                                log: log,
-                              ),
-                            ),
-                    transitionsBuilder: (
-                      context,
-                      animation,
-                      secondaryAnimation,
-                      child,
-                    ) {
-                      return child;
-                    },
-                  ),
-                );
-
-                if (result != null) {
-                  // setState(() {
-                  //   showDetails = false;
-                  // });
-                }
-              },
-              child: Card(
-                shape: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.r),
-                  borderSide: BorderSide.none,
+    return GestureDetector(
+      onTap: () async {
+        // Get.toNamed(Routes.COW_LOGGER_DETAILS, arguments: {'log': log});
+        final result = await Navigator.of(context).push(
+          PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 700),
+            reverseTransitionDuration: const Duration(milliseconds: 800),
+            pageBuilder:
+                (context, animation, secondaryAnimation) => FadeTransition(
+                  opacity: animation,
+                  // child: ProductDetailScreen(
+                  //   // product: products[index],
+                  //   onAddProduct: (product) {},
+                  //   log: log,
+                  // ),
+                  child: CowLoggerDetailsView(log),
                 ),
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15.0),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 100,
-                        width: 140,
-                        child: Hero(
-                          tag: "${log.id}",
-                          child: mt.Image.network(log.image!.url!),
-                        ),
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
+              return child;
+            },
+          ),
+        );
+      },
+      child: SizedBox(
+        width: double.infinity,
+        // height: 5,
+        child: Container(
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(12, 26),
+                blurRadius: 50,
+                spreadRadius: 0,
+                color: Colors.grey.withOpacity(.25),
+              ),
+            ],
+          ),
+          child: SingleChildScrollView(
+            child: Card(
+              shape: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(15.r),
+                borderSide: BorderSide.none,
+              ),
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                child: Column(
+                  children: [
+                    DropdownButton<String>(
+                      icon: const Icon(Icons.more_horiz),
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.deepPurple),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.deepPurpleAccent,
                       ),
-                      SizedBox(height: 5.h),
-                      Text(log.name, style: AppTypography.kMedium14),
-                      SizedBox(height: 4.h),
-                      Text(
-                        log.description,
-                        style: AppTypography.kLight12.copyWith(
-                          color: AppColors.kNeutral04.withOpacity(0.75),
-                        ),
+                      onChanged: (String? value) {
+                        if (value == 'Edit') {
+                          Get.toNamed(
+                            Routes.COW_LOGGER_EDIT,
+                            arguments: {'log': log},
+                          );
+                        } else {
+                          // 'delete'
+                          cowLoggerController.deleteLog(log.documentId);
+                        }
+                      },
+                      items:
+                          droplist.map<DropdownMenuItem<String>>((
+                            String value,
+                          ) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                              onTap: () => {},
+                            );
+                          }).toList(),
+                    ),
+                    SizedBox(
+                      height: 100,
+                      width: 140,
+                      child: Hero(
+                        tag: "${log.id}",
+                        child: mt.Image.network(log.image!.url!),
                       ),
-                      SizedBox(height: 8.h),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 4.5.h,
-                          horizontal: 8.w,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.kLime,
-                          borderRadius: BorderRadius.circular(5.r),
-                        ),
-                        child: Text(
-                          '\$ ${log.date?.toIso8601String()}',
-                          style: AppTypography.kMedium12,
-                        ),
+                    ),
+                    SizedBox(height: 5.h),
+                    Text(log.name, style: AppTypography.kMedium14),
+                    SizedBox(height: 4.h),
+                    Text(
+                      log.description,
+                      style: AppTypography.kLight12.copyWith(
+                        color: AppColors.kNeutral04.withOpacity(0.75),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 8.h),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.5.h,
+                        horizontal: 8.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.kLime,
+                        borderRadius: BorderRadius.circular(5.r),
+                      ),
+                      child: Text(
+                        '\$ ${log.date?.toIso8601String()}',
+                        style: AppTypography.kMedium12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
-        const Spacer(),
-        Column(
-          children: [
-            DropdownButton<String>(
-              icon: const Icon(Icons.more_horiz),
-              elevation: 16,
-              style: const TextStyle(color: Colors.deepPurple),
-              underline: Container(height: 2, color: Colors.deepPurpleAccent),
-              onChanged: (String? value) {
-                if (value == 'Edit') {
-                  Get.toNamed(Routes.COW_LOGGER_EDIT, arguments: {'log': log});
-                } else {
-                  // 'delete'
-                  cowLoggerController.deleteLog(log.documentId);
-                }
-              },
-              items:
-                  droplist.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                      onTap: () => {},
-                    );
-                  }).toList(),
-            ),
-          ],
-        ),
-      ],
+      ),
     );
+    // return Row(
+    //   children: [
+    //     Column(
+    //       children: [
+    //         GestureDetector(
+    //           onTap: () async {
+    //             // Get.toNamed(Routes.COW_LOGGER_DETAILS, arguments: {'log': log});
+    //             final result = await Navigator.of(context).push(
+    //               PageRouteBuilder(
+    //                 transitionDuration: const Duration(milliseconds: 700),
+    //                 reverseTransitionDuration: const Duration(
+    //                   milliseconds: 800,
+    //                 ),
+    //                 pageBuilder:
+    //                     (context, animation, secondaryAnimation) =>
+    //                         FadeTransition(
+    //                           opacity: animation,
+    //                           // child: ProductDetailScreen(
+    //                           //   // product: products[index],
+    //                           //   onAddProduct: (product) {},
+    //                           //   log: log,
+    //                           // ),
+    //                           child: CowLoggerDetailsView(log),
+    //                         ),
+    //                 transitionsBuilder: (
+    //                   context,
+    //                   animation,
+    //                   secondaryAnimation,
+    //                   child,
+    //                 ) {
+    //                   return child;
+    //                 },
+    //               ),
+    //             );
+    //           },
+    //           child: Card(
+    //             shape: OutlineInputBorder(
+    //               borderRadius: BorderRadius.circular(15.r),
+    //               borderSide: BorderSide.none,
+    //             ),
+    //             color: Colors.white,
+    //             child: Padding(
+    //               padding: const EdgeInsets.symmetric(vertical: 15.0),
+    //               child: Column(
+    //                 children: [
+    //                   DropdownButton<String>(
+    //                     icon: const Icon(Icons.more_horiz),
+    //                     elevation: 16,
+    //                     style: const TextStyle(color: Colors.deepPurple),
+    //                     underline: Container(
+    //                       height: 2,
+    //                       color: Colors.deepPurpleAccent,
+    //                     ),
+    //                     onChanged: (String? value) {
+    //                       if (value == 'Edit') {
+    //                         Get.toNamed(
+    //                           Routes.COW_LOGGER_EDIT,
+    //                           arguments: {'log': log},
+    //                         );
+    //                       } else {
+    //                         // 'delete'
+    //                         cowLoggerController.deleteLog(log.documentId);
+    //                       }
+    //                     },
+    //                     items:
+    //                         droplist.map<DropdownMenuItem<String>>((
+    //                           String value,
+    //                         ) {
+    //                           return DropdownMenuItem<String>(
+    //                             value: value,
+    //                             child: Text(value),
+    //                             onTap: () => {},
+    //                           );
+    //                         }).toList(),
+    //                   ),
+    //                   SizedBox(
+    //                     height: 100,
+    //                     width: 140,
+    //                     child: Hero(
+    //                       tag: "${log.id}",
+    //                       child: mt.Image.network(log.image!.url!),
+    //                     ),
+    //                   ),
+    //                   SizedBox(height: 5.h),
+    //                   Text(log.name, style: AppTypography.kMedium14),
+    //                   SizedBox(height: 4.h),
+    //                   Text(
+    //                     log.description,
+    //                     style: AppTypography.kLight12.copyWith(
+    //                       color: AppColors.kNeutral04.withOpacity(0.75),
+    //                     ),
+    //                   ),
+    //                   SizedBox(height: 8.h),
+    //                   Container(
+    //                     padding: EdgeInsets.symmetric(
+    //                       vertical: 4.5.h,
+    //                       horizontal: 8.w,
+    //                     ),
+    //                     decoration: BoxDecoration(
+    //                       color: AppColors.kLime,
+    //                       borderRadius: BorderRadius.circular(5.r),
+    //                     ),
+    //                     child: Text(
+    //                       '\$ ${log.date?.toIso8601String()}',
+    //                       style: AppTypography.kMedium12,
+    //                     ),
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //     // const Spacer(),
+    //     // Column(
+    //     //   children: [
+    //     //     DropdownButton<String>(
+    //     //       icon: const Icon(Icons.more_horiz),
+    //     //       elevation: 16,
+    //     //       style: const TextStyle(color: Colors.deepPurple),
+    //     //       underline: Container(height: 2, color: Colors.deepPurpleAccent),
+    //     //       onChanged: (String? value) {
+    //     //         if (value == 'Edit') {
+    //     //           Get.toNamed(Routes.COW_LOGGER_EDIT, arguments: {'log': log});
+    //     //         } else {
+    //     //           // 'delete'
+    //     //           cowLoggerController.deleteLog(log.documentId);
+    //     //         }
+    //     //       },
+    //     //       items:
+    //     //           droplist.map<DropdownMenuItem<String>>((String value) {
+    //     //             return DropdownMenuItem<String>(
+    //     //               value: value,
+    //     //               child: Text(value),
+    //     //               onTap: () => {},
+    //     //             );
+    //     //           }).toList(),
+    //     //     ),
+    //     //   ],
+    //     // ),
+    //   ],
+    // );
 
     // return OpenContainer(
     //   transitionType: ContainerTransitionType.fadeThrough,
@@ -181,18 +332,18 @@ class LoggerListCard extends StatelessWidget {
     //     //   crossAxisAlignment: CrossAxisAlignment.start,
     //     //   children: [
     //     //     Container(
-    //     //       decoration: BoxDecoration(
-    //     //         color: Colors.white,
-    //     //         shape: BoxShape.circle,
-    //     //         boxShadow: [
-    //     //           BoxShadow(
-    //     //             offset: const Offset(12, 26),
-    //     //             blurRadius: 50,
-    //     //             spreadRadius: 0,
-    //     //             color: Colors.grey.withOpacity(.25),
-    //     //           ),
-    //     //         ],
-    //     //       ),
+    // decoration: BoxDecoration(
+    //   color: Colors.white,
+    //   shape: BoxShape.circle,
+    //   boxShadow: [
+    //     BoxShadow(
+    //       offset: const Offset(12, 26),
+    //       blurRadius: 50,
+    //       spreadRadius: 0,
+    //       color: Colors.grey.withOpacity(.25),
+    //     ),
+    //   ],
+    // ),
     //     //       child: IconButton(
     //     //         icon: const Icon(Icons.arrow_back, color: Color(0xff4338CA)),
     //     //         onPressed: () {},
